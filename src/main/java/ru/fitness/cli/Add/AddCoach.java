@@ -1,0 +1,75 @@
+package ru.fitness.cli.Add;
+
+import ru.fitness.cli.Command;
+import ru.fitness.entities.Coach;
+import ru.fitness.entities.Specialization;
+import ru.fitness.service.ServiceFactory;
+import ru.fitness.service.Coach.CoachService;
+import ru.fitness.service.Specialization.SpecializationService;
+
+import java.util.Scanner;
+
+public class AddCoach implements Command {
+    private Scanner scn = new Scanner(System.in);
+
+    @Override
+    public void execute() {
+        try {
+            System.out.print("Введите ФИО тренера: ");
+            String name = scn.nextLine();
+
+            Specialization specialization = selectSpecialization();
+            if (specialization == null) {
+                return;
+            }
+
+            Coach coach = new Coach(0, name, specialization);
+            CoachService service = ServiceFactory.getCoachService();
+            service.create(coach);
+
+            System.out.println("✓ Тренер '" + name + "' добавлен! Специализация: " + specialization.getName());
+        } catch (Exception e) {
+            System.out.println("Ошибка: " + e.getMessage());
+            scn.nextLine();
+        }
+    }
+
+    private Specialization selectSpecialization() {
+        try {
+            SpecializationService specService = ServiceFactory.getSpecializationService();
+            var specializations = specService.getAll();
+
+            System.out.println("\n--- ДОСТУПНЫЕ СПЕЦИАЛИЗАЦИИ ---");
+            if (specializations.isEmpty()) {
+                System.out.println("Специализации не найдены. Сначала добавьте специализации.");
+                return null;
+            }
+
+            for (var spec : specializations) {
+                System.out.println(spec.getId() + ". " + spec.getName());
+            }
+
+            System.out.print("\nВведите ID специализации: ");
+            int specId = scn.nextInt();
+            scn.nextLine();
+
+            Specialization specialization = specService.getById(specId);
+            if (specialization == null) {
+                System.out.println("Ошибка: Специализация с ID " + specId + " не существует!");
+                return null;
+            }
+
+            return specialization;
+
+        } catch (Exception e) {
+            System.out.println("Ошибка при выборе специализации: " + e.getMessage());
+            scn.nextLine();
+            return null;
+        }
+    }
+
+    @Override
+    public String getCommandName() {
+        return "Добавить тренера";
+    }
+}
