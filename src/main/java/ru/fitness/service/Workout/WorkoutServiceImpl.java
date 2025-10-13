@@ -99,4 +99,13 @@ public class WorkoutServiceImpl implements WorkoutService {
     public List<Workout> getAll() {
         return repository.getAll();
     }
+
+    @Override
+    public boolean delete(int id) {
+        Workout workout = repository.getById(id);
+        if (workout == null) {
+            return false;
+        }
+        return repository.delete(id);
+    }
 }

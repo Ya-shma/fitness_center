@@ -77,4 +77,13 @@ public class SpecializationServiceImpl implements SpecializationService {
     public List<Specialization> getAll() {
         return repository.getAll();
     }
+
+    @Override
+    public boolean delete(int id) {
+        Specialization specialization = repository.getById(id);
+        if (specialization == null) {
+            return false;
+        }
+        return repository.delete(id);
+    }
 }

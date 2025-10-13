@@ -77,4 +77,9 @@ public class ClientRepositoryInMemImpl implements ClientRepository {
     public List<Client> getAll() {
         return new ArrayList<>(clients.values());
     }
+
+    @Override
+    public boolean delete(int id) {
+        return clients.remove(id) != null;
+    }
 }

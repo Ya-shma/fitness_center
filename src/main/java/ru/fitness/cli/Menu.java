@@ -2,7 +2,12 @@ package ru.fitness.cli;
 
 import ru.fitness.cli.Add.AddClient;
 import ru.fitness.cli.Add.AddCoach;
+import ru.fitness.cli.Add.AddSpecialization;
 import ru.fitness.cli.Add.AddWorkout;
+import ru.fitness.cli.Delete.DeleteClient;
+import ru.fitness.cli.Delete.DeleteCoach;
+import ru.fitness.cli.Delete.DeleteSpecialization;
+import ru.fitness.cli.Delete.DeleteWorkout;
 import ru.fitness.cli.Get.*;
 
 import java.util.InputMismatchException;
@@ -13,17 +18,21 @@ public class Menu {
     private static Command[] commands = new Command[]{
             new GetAllSpecializations(),
             new GetSpecializationById(),
-            new ru.fitness.cli.Add.AddSpecialization(),
+            new AddSpecialization(),
+            new DeleteSpecialization(),
             new GetAllCoaches(),
             new GetCoachById(),
             new GetCoachBySpecialization(),
             new AddCoach(),
+            new DeleteCoach(),
             new GetAllClients(),
             new GetClientByPhoneNumber(),
             new AddClient(),
+            new DeleteClient(),
             new GetAllWorkouts(),
             new GetWorkoutsByCoach(),
-            new AddWorkout()
+            new AddWorkout(),
+            new DeleteWorkout()
     };
 
     public static void run(){

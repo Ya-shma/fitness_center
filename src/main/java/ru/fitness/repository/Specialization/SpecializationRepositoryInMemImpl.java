@@ -67,4 +67,8 @@ public class SpecializationRepositoryInMemImpl implements SpecializationReposito
         return new ArrayList<>(specializations.values());
     }
 
+    @Override
+    public boolean delete(int id) {
+        return specializations.remove(id) != null;
+    }
 }

@@ -87,4 +87,13 @@ public class ClientServiceImpl implements ClientService {
     public List<Client> getAll() {
         return repository.getAll();
     }
+
+    @Override
+    public boolean delete(int id) {
+        Client client = repository.getById(id);
+        if (client == null) {
+            return false;
+        }
+        return repository.delete(id);
+    }
 }

@@ -12,4 +12,6 @@ public interface Service<T, Integer> {
     T getById(int id);
 
     List<T> getAll();
+
+    boolean delete(int id);
 }

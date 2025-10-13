@@ -77,4 +77,9 @@ public class CoachRepositoryInMemImpl implements CoachRepository {
     public List<Coach> getAll() {
         return new ArrayList<>(coaches.values());
     }
+
+    @Override
+    public boolean delete(int id) {
+        return coaches.remove(id) != null;
+    }
 }

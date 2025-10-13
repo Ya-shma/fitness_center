@@ -65,4 +65,13 @@ public class CoachServiceImpl implements CoachService {
     public List<Coach> getAll() {
         return repository.getAll();
     }
+
+    @Override
+    public boolean delete(int id) {
+        Coach coach = repository.getById(id);
+        if (coach == null) {
+            return false;
+        }
+        return repository.delete(id);
+    }
 }

@@ -78,4 +78,9 @@ public class WorkoutRepositoryInMemImpl implements WorkoutRepository {
     public List<Workout> getAll() {
         return new ArrayList<>(workouts.values());
     }
+
+    @Override
+    public boolean delete(int id) {
+        return workouts.remove(id) != null;
+    }
 }
