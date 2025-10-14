@@ -13,7 +13,7 @@ public class GetCoachBySpecialization implements Command {
 
     @Override
     public void execute() {
-        System.out.print("Введите ID специализации: ");
+        System.out.print("Enter the specialization ID: ");
         try {
             int specId = scn.nextInt();
             scn.nextLine();
@@ -21,23 +21,23 @@ public class GetCoachBySpecialization implements Command {
             CoachService service = ServiceFactory.getCoachService();
             List<Coach> coaches = service.getCoachBySpecialization(specId);
 
-            System.out.println("\n--- ТРЕНЕРЫ ПО СПЕЦИАЛИЗАЦИИ " + specId + " ---");
+            System.out.println("\n--- COACHES BY SPECIALIZATION " + specId + " ---");
             if (coaches.isEmpty()) {
-                System.out.println("Тренеры не найдены для этой специализации");
+                System.out.println("No coaches have been found for this specialization.");
             } else {
                 for (Coach coach : coaches) {
                     System.out.println(coach.getId() + ". " + coach.getFullName());
                 }
             }
-            System.out.println("Найдено: " + coaches.size() + " тренеров");
+            System.out.println("Found: " + coaches.size() + " coaches");
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             scn.nextLine();
         }
     }
 
     @Override
     public String getCommandName() {
-        return "Найти тренеров по специализации";
+        return "Find coaches by specialization";
     }
 }

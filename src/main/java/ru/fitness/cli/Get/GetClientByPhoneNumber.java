@@ -12,7 +12,7 @@ public class GetClientByPhoneNumber implements Command {
 
     @Override
     public void execute() {
-        System.out.print("Введите телефон для поиска: ");
+        System.out.print("Enter the phone number for the search: ");
         String phoneNumber = scn.nextLine();
 
         try {
@@ -20,17 +20,17 @@ public class GetClientByPhoneNumber implements Command {
             Client client = service.getClientByPhoneNumber(phoneNumber);
 
             if (client != null) {
-                System.out.println("Найден клиент: " + client.getFullName() + " | ID: " + client.getId());
+                System.out.println("A client has been found: " + client.getFullName() + " | ID: " + client.getId());
             } else {
-                System.out.println("Клиент с телефоном " + phoneNumber + " не найден");
+                System.out.println("A client with phone number " + phoneNumber + " wasn't found");
             }
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
     @Override
     public String getCommandName() {
-        return "Найти клиента по телефону";
+        return "Find a client by phone number";
     }
 }

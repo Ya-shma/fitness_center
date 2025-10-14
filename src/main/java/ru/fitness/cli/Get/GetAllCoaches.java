@@ -13,20 +13,20 @@ public class GetAllCoaches implements Command {
         CoachService service = ServiceFactory.getCoachService();
         List<Coach> coaches = service.getAll();
 
-        System.out.println("\n--- ВСЕ ТРЕНЕРЫ ---");
+        System.out.println("\n--- ALL COACHES ---");
         if (coaches.isEmpty()) {
-            System.out.println("Тренеры не найдены");
+            System.out.println("No coaches found");
         } else {
             for (Coach coach : coaches) {
                 System.out.println(coach.getId() + ". " + coach.getFullName() +
-                        " (Специализация: " + coach.getSpecialization().getId() + ")");
+                        " (Specialization: " + coach.getSpecialization().getId() + ")");
             }
         }
-        System.out.println("Всего: " + coaches.size() + " тренеров");
+        System.out.println("Total: " + coaches.size() + " coaches");
     }
 
     @Override
     public String getCommandName() {
-        return "Показать всех тренеров";
+        return "Show all coaches";
     }
 }

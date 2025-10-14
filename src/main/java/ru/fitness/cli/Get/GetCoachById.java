@@ -12,7 +12,7 @@ public class GetCoachById implements Command {
 
     @Override
     public void execute() {
-        System.out.print("Введите ID тренера: ");
+        System.out.print("Enter the coach's ID: ");
         try {
             int id = scn.nextInt();
             scn.nextLine();
@@ -21,18 +21,18 @@ public class GetCoachById implements Command {
             Coach coach = service.getById(id);
 
             if (coach != null) {
-                System.out.println("Найден тренер: " + coach.getFullName());
+                System.out.println("A coach has been found: " + coach.getFullName());
             } else {
-                System.out.println("Тренер с ID " + id + " не найден");
+                System.out.println("Coach with ID " + id + " wasn't found");
             }
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             scn.nextLine();
         }
     }
 
     @Override
     public String getCommandName() {
-        return "Найти тренера по ID";
+        return "Find a coach by ID";
     }
 }

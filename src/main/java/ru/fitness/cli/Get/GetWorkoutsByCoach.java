@@ -13,7 +13,7 @@ public class GetWorkoutsByCoach implements Command {
 
     @Override
     public void execute() {
-        System.out.print("Введите ID тренера: ");
+        System.out.print("Enter the coach's ID: ");
         try {
             int coachId = scn.nextInt();
             scn.nextLine();
@@ -21,24 +21,24 @@ public class GetWorkoutsByCoach implements Command {
             WorkoutService service = ServiceFactory.getWorkoutService();
             List<Workout> workouts = service.getWorkoutsByCoach(coachId);
 
-            System.out.println("\n--- ЗАНЯТИЯ ТРЕНЕРА " + coachId + " ---");
+            System.out.println("\n--- WORKOUTS OF COACH " + coachId + " ---");
             if (workouts.isEmpty()) {
-                System.out.println("Занятия не найдены для этого тренера");
+                System.out.println("No workouts were found for this coach");
             } else {
                 for (Workout workout : workouts) {
                     System.out.println(workout.getId() + ". " + workout.getName() +
-                            " | Время: " + workout.getDateTime());
+                            " | Time: " + workout.getDateTime());
                 }
             }
-            System.out.println("Найдено: " + workouts.size() + " занятий");
+            System.out.println("Found: " + workouts.size() + " workouts");
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             scn.nextLine();
         }
     }
 
     @Override
     public String getCommandName() {
-        return "Найти занятия по тренеру";
+        return "Find workouts by coach";
     }
 }

@@ -13,19 +13,19 @@ public class GetAllSpecializations implements Command {
         SpecializationService service = ServiceFactory.getSpecializationService();
         List<Specialization> specializations = service.getAll();
 
-        System.out.println("\n--- ВСЕ СПЕЦИАЛИЗАЦИИ ---");
+        System.out.println("\n--- ALL SPECIALIZATIONS ---");
         if (specializations.isEmpty()) {
-            System.out.println("Специализации не найдены");
+            System.out.println("No specializations found");
         } else {
             for (Specialization spec : specializations) {
                 System.out.println(spec.getId() + ". " + spec.getName());
             }
         }
-        System.out.println("Всего: " + specializations.size() + " специализаций");
+        System.out.println("Total: " + specializations.size() + " specialization");
     }
 
     @Override
     public String getCommandName() {
-        return "Показать все специализации";
+        return "Show all specializations";
     }
 }

@@ -13,20 +13,20 @@ public class GetAllClients implements Command {
         ClientService service = ServiceFactory.getClientService();
         List<Client> clients = service.getAll();
 
-        System.out.println("\n--- ВСЕ КЛИЕНТЫ ---");
+        System.out.println("\n--- ALL CLIENTS ---");
         if (clients.isEmpty()) {
-            System.out.println("Клиенты не найдены");
+            System.out.println("No clients found");
         } else {
             for (Client client : clients) {
                 System.out.println(client.getId() + ". " + client.getFullName() +
-                        " | Телефон: " + client.getPhoneNumber());
+                        " | Phone number: " + client.getPhoneNumber());
             }
         }
-        System.out.println("Всего: " + clients.size() + " клиентов");
+        System.out.println("Total: " + clients.size() + " clients");
     }
 
     @Override
     public String getCommandName() {
-        return "Показать всех клиентов";
+        return "Show all clients";
     }
 }

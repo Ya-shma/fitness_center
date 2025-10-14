@@ -13,21 +13,21 @@ public class GetAllWorkouts implements Command {
         WorkoutService service = ServiceFactory.getWorkoutService();
         List<Workout> workouts = service.getAll();
 
-        System.out.println("\n--- ВСЕ ЗАНЯТИЯ ---");
+        System.out.println("\n--- ALL WORKOUTS ---");
         if (workouts.isEmpty()) {
-            System.out.println("Занятия не найдены");
+            System.out.println("No workout found");
         } else {
             for (Workout workout : workouts) {
                 System.out.println(workout.getId() + ". " + workout.getName() +
-                        " | Время: " + workout.getDateTime() +
-                        " | Вместимость: " + workout.getMaxCapacity());
+                        " | Time: " + workout.getDateTime() +
+                        " | Capacity: " + workout.getMaxCapacity());
             }
         }
-        System.out.println("Всего: " + workouts.size() + " занятий");
+        System.out.println("Total: " + workouts.size() + " workouts");
     }
 
     @Override
     public String getCommandName() {
-        return "Показать все занятия";
+        return "Show all workouts";
     }
 }

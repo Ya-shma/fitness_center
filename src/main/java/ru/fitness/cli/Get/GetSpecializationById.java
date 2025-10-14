@@ -12,7 +12,7 @@ public class GetSpecializationById implements Command {
 
     @Override
     public void execute() {
-        System.out.print("Введите ID специализации: ");
+        System.out.print("Enter the specialization ID: ");
         try {
             int id = scn.nextInt();
             scn.nextLine();
@@ -21,18 +21,18 @@ public class GetSpecializationById implements Command {
             Specialization spec = service.getById(id);
 
             if (spec != null) {
-                System.out.println("Найдена специализация: " + spec.getName());
+                System.out.println("Specialization found: " + spec.getName());
             } else {
-                System.out.println("Специализация с ID " + id + " не найдена");
+                System.out.println("Specialization with ID " + id + " wasn't found");
             }
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             scn.nextLine();
         }
     }
 
     @Override
     public String getCommandName() {
-        return "Найти специализацию по ID";
+        return "Find a specialization by ID";
     }
 }
