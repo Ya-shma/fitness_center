@@ -38,7 +38,7 @@ public class CoachServiceImpl implements CoachService {
     @Override
     public void create(Coach object) {
         if (object.getFullName() == null || object.getFullName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Coach name cannot be empty");
+            throw new IllegalArgumentException("Coach's name can't be empty");
         }
         repository.add(object);
     }
@@ -51,7 +51,7 @@ public class CoachServiceImpl implements CoachService {
     @Override
     public void update(int id, Coach newObject) {
         if (newObject.getFullName() == null || newObject.getFullName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Coach name cannot be empty");
+            throw new IllegalArgumentException("Coach's name can't be empty");
         }
         repository.update(id, newObject);
     }

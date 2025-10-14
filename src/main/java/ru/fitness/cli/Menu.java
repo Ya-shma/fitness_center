@@ -36,32 +36,32 @@ public class Menu {
     };
 
     public static void run(){
-        System.out.println("=== ФИТНЕС-ЦЕНТР ===");
+        System.out.println("=== FITNESS CENTRE ===");
         while (true){
-            System.out.println("\n--- ГЛАВНОЕ МЕНЮ ---");
+            System.out.println("\n--- MAIN MENU ---");
             for (int i = 1; i <= commands.length; i++) {
                 System.out.println(i + ". " + commands[i - 1].getCommandName());
             }
-            System.out.println("0. Выход");
-            System.out.print("Выбор: ");
+            System.out.println("0. Exit");
+            System.out.print("Choice: ");
 
             int inputCommand = 0;
             try {
                 inputCommand = scn.nextInt();
                 scn.nextLine();
             } catch (InputMismatchException ime){
-                System.out.println("Неверная команда");
+                System.out.println("Wrong command");
                 scn.nextLine();
                 continue;
             }
 
             if(inputCommand == 0){
-                System.out.println("Завершение работы...");
+                System.out.println("End of work...");
                 return;
             }
 
             if(inputCommand > commands.length){
-                System.out.println("Неверная команда");
+                System.out.println("Wrong command");
                 continue;
             }
 

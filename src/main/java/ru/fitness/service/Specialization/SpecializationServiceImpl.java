@@ -44,7 +44,7 @@ public class SpecializationServiceImpl implements SpecializationService {
     @Override
     public void create(Specialization object) {
         if (object.getName() == null || object.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Specialization name cannot be empty");
+            throw new IllegalArgumentException("Specialization's name can't be empty");
         }
 
         Specialization existing = repository.getSpecializationByName(object.getName());
@@ -63,7 +63,7 @@ public class SpecializationServiceImpl implements SpecializationService {
     @Override
     public void update(int id, Specialization newObject) {
         if (newObject.getName() == null || newObject.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Specialization name cannot be empty");
+            throw new IllegalArgumentException("Specialization's name can't be empty");
         }
         repository.update(id, newObject);
     }

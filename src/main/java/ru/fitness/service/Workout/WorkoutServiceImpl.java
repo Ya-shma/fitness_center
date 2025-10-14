@@ -58,15 +58,15 @@ public class WorkoutServiceImpl implements WorkoutService {
     public void create(Workout object) {
 
         if (object.getName() == null || object.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Workout name cannot be empty");
+            throw new IllegalArgumentException("Workout's name can't be empty");
         }
 
         if (object.getDateTime().isBefore(java.time.LocalDateTime.now())) {
-            throw new IllegalArgumentException("Workout cannot be in the past");
+            throw new IllegalArgumentException("Workout can't be in the past");
         }
 
         if (object.getMaxCapacity() <= 0) {
-            throw new IllegalArgumentException("Workout capacity must be positive");
+            throw new IllegalArgumentException("Workout's capacity must be positive");
         }
 
         repository.add(object);
@@ -80,11 +80,11 @@ public class WorkoutServiceImpl implements WorkoutService {
     @Override
     public void update(int id, Workout newObject) {
         if (newObject.getName() == null || newObject.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Workout name cannot be empty");
+            throw new IllegalArgumentException("Workout's name can't be empty");
         }
 
         if (newObject.getDateTime().isBefore(java.time.LocalDateTime.now())) {
-            throw new IllegalArgumentException("Workout cannot be in the past");
+            throw new IllegalArgumentException("Workout can't be in the past");
         }
 
         repository.update(id, newObject);

@@ -45,7 +45,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void create(Client object) {
         if (object.getFullName() == null || object.getFullName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Client name cannot be empty");
+            throw new IllegalArgumentException("Client's name can't be empty");
         }
 
         if (!validatePhoneNumber(object.getPhoneNumber())) {
@@ -68,7 +68,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void update(int id, Client newObject) {
         if (newObject.getFullName() == null || newObject.getFullName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Client name cannot be empty");
+            throw new IllegalArgumentException("Client's name can't be empty");
         }
 
         if (!validatePhoneNumber(newObject.getPhoneNumber())) {
