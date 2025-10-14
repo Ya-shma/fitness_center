@@ -35,6 +35,6 @@ public class DeleteCoach implements Command {
 
     @Override
     public String getCommandName() {
-        return "Удалить тренера по ID";
+        return "Delete a coach by ID";
     }
 }
