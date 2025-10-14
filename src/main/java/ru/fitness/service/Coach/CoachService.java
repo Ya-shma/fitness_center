@@ -9,6 +9,4 @@ public interface CoachService extends Service<Coach> {
     Coach getCoachByName(String name);
 
     List<Coach> getCoachBySpecialization(int specializationId);
-
-    boolean validateCoachAge(int age);
 }

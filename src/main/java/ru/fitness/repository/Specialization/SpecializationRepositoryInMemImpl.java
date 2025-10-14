@@ -44,17 +44,12 @@ public class SpecializationRepositoryInMemImpl implements SpecializationReposito
     }
 
     @Override
-    public void removeAll() {
-        specializations.clear();
-        currentId = 1;
-    }
-
-    @Override
     public void update(int id, Specialization newObject) {
-        if (specializations.containsKey(id)) {
-            newObject.setId(id);
-            specializations.put(id, newObject);
+        if (!specializations.containsKey(id)) {
+            throw new IllegalArgumentException("Specialization with id " + id + " not found");
         }
+        newObject.setId(id);
+        specializations.put(id, newObject);
     }
 
     @Override

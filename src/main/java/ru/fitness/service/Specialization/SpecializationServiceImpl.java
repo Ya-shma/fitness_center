@@ -4,10 +4,8 @@ import ru.fitness.entities.Specialization;
 import ru.fitness.repository.Specialization.SpecializationRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SpecializationServiceImpl implements SpecializationService {
-
     private static SpecializationServiceImpl obj;
     private final SpecializationRepository repository;
 
@@ -23,28 +21,39 @@ public class SpecializationServiceImpl implements SpecializationService {
     }
 
     @Override
+    public void update(int id, Specialization newObject) {
+        Specialization existing = repository.getById(id);
+        if (existing == null) {
+            throw new IllegalArgumentException("Specialization with ID " + id + " not found");
+        }
+
+        if (newObject.getName() == null || newObject.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Specialization name cannot be empty");
+        }
+
+        Specialization sameName = repository.getSpecializationByName(newObject.getName());
+        if (sameName != null && sameName.getId() != id) {
+            throw new IllegalArgumentException("Specialization with name '" + newObject.getName() + "' already exists");
+        }
+
+        newObject.setId(id);
+        repository.update(id, newObject);
+    }
+
+    @Override
     public Specialization getSpecializationByName(String name) {
         return repository.getSpecializationByName(name);
     }
 
     @Override
-    public List<Specialization> getPopularSpecializations(int limit) {
-        List<Specialization> all = repository.getAll();
-        return all.stream()
-                .limit(limit)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public boolean isSpecializationAvailable(String name) {
-        Specialization spec = repository.getSpecializationByName(name);
-        return spec != null;
+        return false;
     }
 
     @Override
     public void create(Specialization object) {
         if (object.getName() == null || object.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Specialization's name can't be empty");
+            throw new IllegalArgumentException("Specialization name cannot be empty");
         }
 
         Specialization existing = repository.getSpecializationByName(object.getName());
@@ -53,19 +62,6 @@ public class SpecializationServiceImpl implements SpecializationService {
         }
 
         repository.add(object);
-    }
-
-    @Override
-    public void removeAll() {
-        repository.removeAll();
-    }
-
-    @Override
-    public void update(int id, Specialization newObject) {
-        if (newObject.getName() == null || newObject.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Specialization's name can't be empty");
-        }
-        repository.update(id, newObject);
     }
 
     @Override

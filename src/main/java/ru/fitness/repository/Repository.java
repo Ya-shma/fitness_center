@@ -5,8 +5,6 @@ import java.util.List;
 public interface Repository<T> {
     void add(T object);
 
-    void removeAll();
-
     void update(int id, T newObject);
 
     T getById(int id);

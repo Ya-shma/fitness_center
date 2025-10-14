@@ -31,11 +31,6 @@ public class CoachServiceImpl implements CoachService {
     }
 
     @Override
-    public boolean validateCoachAge(int age) {
-        return age >= 18 && age <= 70;
-    }
-
-    @Override
     public void create(Coach object) {
         if (object.getFullName() == null || object.getFullName().trim().isEmpty()) {
             throw new IllegalArgumentException("Coach's name can't be empty");
@@ -44,15 +39,15 @@ public class CoachServiceImpl implements CoachService {
     }
 
     @Override
-    public void removeAll() {
-        repository.removeAll();
-    }
-
-    @Override
     public void update(int id, Coach newObject) {
         if (newObject.getFullName() == null || newObject.getFullName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Coach's name can't be empty");
+            throw new IllegalArgumentException("Coach name cannot be empty");
         }
+
+        if (newObject.getSpecialization() == null) {
+            throw new IllegalArgumentException("Coach must have a specialization");
+        }
+
         repository.update(id, newObject);
     }
 

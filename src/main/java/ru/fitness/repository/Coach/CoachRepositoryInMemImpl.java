@@ -55,17 +55,12 @@ public class CoachRepositoryInMemImpl implements CoachRepository {
     }
 
     @Override
-    public void removeAll() {
-        coaches.clear();
-        currentId = 1;
-    }
-
-    @Override
     public void update(int id, Coach newObject) {
-        if (coaches.containsKey(id)) {
-            newObject.setId(id);
-            coaches.put(id, newObject);
+        if (!coaches.containsKey(id)) {
+            throw new IllegalArgumentException("Coach with id " + id + " not found");
         }
+        newObject.setId(id);
+        coaches.put(id, newObject);
     }
 
     @Override

@@ -50,7 +50,6 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public int getRegisteredClientsCount(int workoutId) {
-        //бизнес-логика
         return 0;
     }
 
@@ -73,18 +72,17 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     @Override
-    public void removeAll() {
-        repository.removeAll();
-    }
-
-    @Override
     public void update(int id, Workout newObject) {
         if (newObject.getName() == null || newObject.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Workout's name can't be empty");
+            throw new IllegalArgumentException("Workout name cannot be empty");
         }
 
         if (newObject.getDateTime().isBefore(java.time.LocalDateTime.now())) {
-            throw new IllegalArgumentException("Workout can't be in the past");
+            throw new IllegalArgumentException("Workout cannot be in the past");
+        }
+
+        if (newObject.getMaxCapacity() <= 0) {
+            throw new IllegalArgumentException("Workout capacity must be positive");
         }
 
         repository.update(id, newObject);

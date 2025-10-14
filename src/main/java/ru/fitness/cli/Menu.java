@@ -9,6 +9,10 @@ import ru.fitness.cli.Delete.DeleteCoach;
 import ru.fitness.cli.Delete.DeleteSpecialization;
 import ru.fitness.cli.Delete.DeleteWorkout;
 import ru.fitness.cli.Get.*;
+import ru.fitness.cli.Update.UpdateClient;
+import ru.fitness.cli.Update.UpdateCoach;
+import ru.fitness.cli.Update.UpdateSpecialization;
+import ru.fitness.cli.Update.UpdateWorkout;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -16,23 +20,30 @@ import java.util.Scanner;
 public class Menu {
     private static Scanner scn = new Scanner(System.in);
     private static Command[] commands = new Command[]{
+            // Специализации
             new GetAllSpecializations(),
             new GetSpecializationById(),
             new AddSpecialization(),
-            new DeleteSpecialization(),
+            new UpdateSpecialization(),
+
+            // Тренеры
             new GetAllCoaches(),
             new GetCoachById(),
             new GetCoachBySpecialization(),
             new AddCoach(),
-            new DeleteCoach(),
+            new UpdateCoach(),
+
+            // Клиенты
             new GetAllClients(),
             new GetClientByPhoneNumber(),
             new AddClient(),
-            new DeleteClient(),
+            new UpdateClient(),
+
+            // Занятия
             new GetAllWorkouts(),
             new GetWorkoutsByCoach(),
             new AddWorkout(),
-            new DeleteWorkout()
+            new UpdateWorkout()
     };
 
     public static void run(){
@@ -45,7 +56,7 @@ public class Menu {
             System.out.println("0. Exit");
             System.out.print("Choice: ");
 
-            int inputCommand = 0;
+            int inputCommand;
             try {
                 inputCommand = scn.nextInt();
                 scn.nextLine();

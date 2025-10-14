@@ -55,17 +55,12 @@ public class ClientRepositoryInMemImpl implements ClientRepository {
     }
 
     @Override
-    public void removeAll() {
-        clients.clear();
-        currentId = 1;
-    }
-
-    @Override
     public void update(int id, Client newObject) {
-        if (clients.containsKey(id)) {
-            newObject.setId(id);
-            clients.put(id, newObject);
+        if (!clients.containsKey(id)) {
+            throw new IllegalArgumentException("Client with id " + id + " not found");
         }
+        newObject.setId(id);
+        clients.put(id, newObject);
     }
 
     @Override

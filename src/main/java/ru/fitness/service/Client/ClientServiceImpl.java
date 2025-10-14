@@ -38,7 +38,6 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public int getClientBookingsCount(int clientId) {
-        //бизнес-логика
         return 0;
     }
 

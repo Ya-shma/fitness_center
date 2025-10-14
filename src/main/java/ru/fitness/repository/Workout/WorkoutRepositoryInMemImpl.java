@@ -56,17 +56,12 @@ public class WorkoutRepositoryInMemImpl implements WorkoutRepository {
     }
 
     @Override
-    public void removeAll() {
-        workouts.clear();
-        currentId = 1;
-    }
-
-    @Override
     public void update(int id, Workout newObject) {
-        if (workouts.containsKey(id)) {
-            newObject.setId(id);
-            workouts.put(id, newObject);
+        if (!workouts.containsKey(id)) {
+            throw new IllegalArgumentException("Workout with id " + id + " not found");
         }
+        newObject.setId(id);
+        workouts.put(id, newObject);
     }
 
     @Override
