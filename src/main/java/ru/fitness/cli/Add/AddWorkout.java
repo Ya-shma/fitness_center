@@ -18,7 +18,7 @@ public class AddWorkout implements Command {
             System.out.print("Enter the name of the workout: ");
             String name = scn.nextLine();
 
-            System.out.print("Enter the date and time (yyyy-mm-dd hh:mm): ");
+            System.out.print("Enter the date and time (dd.mm.yyyy hh:mm): ");
             String dateTimeStr = scn.nextLine();
 
             System.out.print("Enter the duration (minutes): ");
@@ -27,12 +27,12 @@ public class AddWorkout implements Command {
             System.out.print("Enter the capacity: ");
             int capacity = scn.nextInt();
 
-            System.out.print("Enter the trainer's ID: ");
-            int trainerId = scn.nextInt();
+            System.out.print("Enter the coach's ID: ");
+            int coachId = scn.nextInt();
             scn.nextLine();
 
             LocalDateTime dateTime = parseDateTime(dateTimeStr);
-            Workout workout = new Workout(0, name, dateTime, duration, capacity, trainerId);
+            Workout workout = new Workout(0, name, dateTime, duration, capacity, coachId);
 
             WorkoutService service = ServiceFactory.getWorkoutService();
             service.create(workout);
@@ -46,10 +46,10 @@ public class AddWorkout implements Command {
 
     private LocalDateTime parseDateTime(String dateTimeStr) {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
             return LocalDateTime.parse(dateTimeStr, formatter);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid date format. Use: yyyy-mm-dd hh:mm");
+            throw new IllegalArgumentException("Invalid date format. Use: dd.mm.yyyy hh:mm");
         }
     }
 

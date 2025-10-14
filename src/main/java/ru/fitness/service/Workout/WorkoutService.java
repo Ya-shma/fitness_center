@@ -5,7 +5,7 @@ import ru.fitness.service.Service;
 
 import java.util.List;
 
-public interface WorkoutService extends Service<Workout, Integer> {
+public interface WorkoutService extends Service<Workout> {
     List<Workout> getWorkoutsByCoach(int coachId);
 
     List<Workout> getWorkoutsByName(String name);

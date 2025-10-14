@@ -61,11 +61,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void removeAll() {
-        repository.removeAll();
-    }
-
-    @Override
     public void update(int id, Client newObject) {
         if (newObject.getFullName() == null || newObject.getFullName().trim().isEmpty()) {
             throw new IllegalArgumentException("Client's name can't be empty");

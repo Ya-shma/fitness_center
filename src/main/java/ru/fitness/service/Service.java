@@ -2,10 +2,8 @@ package ru.fitness.service;
 
 import java.util.List;
 
-public interface Service<T, Integer> {
+public interface Service<T> {
     void create(T object);
-
-    void removeAll();
 
     void update(int id, T newObject);
 

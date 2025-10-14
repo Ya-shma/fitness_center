@@ -5,7 +5,7 @@ import ru.fitness.service.Service;
 
 import java.util.List;
 
-public interface ClientService extends Service<Client, Integer> {
+public interface ClientService extends Service<Client> {
     Client getClientByPhoneNumber(String phoneNumber);
 
     List<Client> getClientsByName(String name);

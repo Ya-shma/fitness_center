@@ -5,7 +5,7 @@ import ru.fitness.repository.Repository;
 
 import java.util.List;
 
-public interface CoachRepository extends Repository<Coach, Integer> {
+public interface CoachRepository extends Repository<Coach> {
     Coach getCoachByName(String name);
 
     List<Coach> getCoachBySpecialization(int specializationId);

@@ -2,7 +2,7 @@ package ru.fitness.repository;
 
 import java.util.List;
 
-public interface Repository<T, Integer> {
+public interface Repository<T> {
     void add(T object);
 
     void removeAll();
