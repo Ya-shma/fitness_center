@@ -15,7 +15,7 @@ public class DeleteCoach implements Command {
         try {
             new GetAllCoaches().execute();
 
-            System.out.print("Введите ID тренера для удаления: ");
+            System.out.print("Enter the coach's ID to delete: ");
             int id = scn.nextInt();
             scn.nextLine();
 
@@ -23,12 +23,12 @@ public class DeleteCoach implements Command {
             boolean deleted = service.delete(id);
 
             if (deleted) {
-                System.out.println("Тренер с ID " + id + " удален!");
+                System.out.println("Coach with ID " + id + " has been deleted!");
             } else {
-                System.out.println("Тренер с ID " + id + " не найден");
+                System.out.println("Coach with ID " + id + " wasn't found");
             }
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             scn.nextLine();
         }
     }

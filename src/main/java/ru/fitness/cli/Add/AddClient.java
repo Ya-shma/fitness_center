@@ -13,24 +13,24 @@ public class AddClient implements Command {
     @Override
     public void execute() {
         try {
-            System.out.print("Введите ФИО клиента: ");
+            System.out.print("Enter the client's full name: ");
             String name = scn.nextLine();
 
-            System.out.print("Введите телефон клиента: ");
+            System.out.print("Enter the client's phone number: ");
             String phone = scn.nextLine();
 
             Client client = new Client(0, name, phone);
             ClientService service = ServiceFactory.getClientService();
             service.create(client);
 
-            System.out.println("✓ Клиент '" + name + "' добавлен!");
+            System.out.println("Client '" + name + "' was added!");
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
     @Override
     public String getCommandName() {
-        return "Добавить клиента";
+        return "Add client";
     }
 }

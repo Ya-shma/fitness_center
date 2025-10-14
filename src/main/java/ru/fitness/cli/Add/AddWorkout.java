@@ -15,19 +15,19 @@ public class AddWorkout implements Command {
     @Override
     public void execute() {
         try {
-            System.out.print("Введите название занятия: ");
+            System.out.print("Enter the name of the workout: ");
             String name = scn.nextLine();
 
-            System.out.print("Введите дату и время (гггг-мм-дд чч:мм): ");
+            System.out.print("Enter the date and time (yyyy-mm-dd hh:mm): ");
             String dateTimeStr = scn.nextLine();
 
-            System.out.print("Введите продолжительность (минуты): ");
+            System.out.print("Enter the duration (minutes): ");
             int duration = scn.nextInt();
 
-            System.out.print("Введите вместимость: ");
+            System.out.print("Enter the capacity: ");
             int capacity = scn.nextInt();
 
-            System.out.print("Введите ID тренера: ");
+            System.out.print("Enter the trainer's ID: ");
             int trainerId = scn.nextInt();
             scn.nextLine();
 
@@ -37,9 +37,9 @@ public class AddWorkout implements Command {
             WorkoutService service = ServiceFactory.getWorkoutService();
             service.create(workout);
 
-            System.out.println("✓ Занятие '" + name + "' добавлено!");
+            System.out.println("Workout '" + name + "' was added!");
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             scn.nextLine();
         }
     }
@@ -49,12 +49,12 @@ public class AddWorkout implements Command {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             return LocalDateTime.parse(dateTimeStr, formatter);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Неверный формат даты. Используйте: гггг-мм-дд чч:мм");
+            throw new IllegalArgumentException("Invalid date format. Use: yyyy-mm-dd hh:mm");
         }
     }
 
     @Override
     public String getCommandName() {
-        return "Добавить занятие";
+        return "Add workout";
     }
 }

@@ -15,7 +15,7 @@ public class AddCoach implements Command {
     @Override
     public void execute() {
         try {
-            System.out.print("Введите ФИО тренера: ");
+            System.out.print("Enter the coach's full name: ");
             String name = scn.nextLine();
 
             Specialization specialization = selectSpecialization();
@@ -27,9 +27,9 @@ public class AddCoach implements Command {
             CoachService service = ServiceFactory.getCoachService();
             service.create(coach);
 
-            System.out.println("✓ Тренер '" + name + "' добавлен! Специализация: " + specialization.getName());
+            System.out.println("Coach '" + name + "' was added! Specialization: " + specialization.getName());
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             scn.nextLine();
         }
     }
@@ -39,9 +39,9 @@ public class AddCoach implements Command {
             SpecializationService specService = ServiceFactory.getSpecializationService();
             var specializations = specService.getAll();
 
-            System.out.println("\n--- ДОСТУПНЫЕ СПЕЦИАЛИЗАЦИИ ---");
+            System.out.println("\n--- AVAILABLE SPECIALIZATIONS ---");
             if (specializations.isEmpty()) {
-                System.out.println("Специализации не найдены. Сначала добавьте специализации.");
+                System.out.println("No specializations were found. Add specializations first.");
                 return null;
             }
 
@@ -49,20 +49,20 @@ public class AddCoach implements Command {
                 System.out.println(spec.getId() + ". " + spec.getName());
             }
 
-            System.out.print("\nВведите ID специализации: ");
+            System.out.print("\nEnter the specialization ID: ");
             int specId = scn.nextInt();
             scn.nextLine();
 
             Specialization specialization = specService.getById(specId);
             if (specialization == null) {
-                System.out.println("Ошибка: Специализация с ID " + specId + " не существует!");
+                System.out.println("Error: Specialization with ID " + specId + " does not exist!");
                 return null;
             }
 
             return specialization;
 
         } catch (Exception e) {
-            System.out.println("Ошибка при выборе специализации: " + e.getMessage());
+            System.out.println("Error when choosing a specialization: " + e.getMessage());
             scn.nextLine();
             return null;
         }
@@ -70,6 +70,6 @@ public class AddCoach implements Command {
 
     @Override
     public String getCommandName() {
-        return "Добавить тренера";
+        return "Add coach";
     }
 }

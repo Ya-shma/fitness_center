@@ -15,7 +15,7 @@ public class DeleteSpecialization implements Command {
         try {
             new GetAllSpecializations().execute();
 
-            System.out.print("Введите ID специализации для удаления: ");
+            System.out.print("Enter the specialization ID to delete: ");
             int id = scn.nextInt();
             scn.nextLine();
 
@@ -23,18 +23,18 @@ public class DeleteSpecialization implements Command {
             boolean deleted = service.delete(id);
 
             if (deleted) {
-                System.out.println("Специализация с ID " + id + " удалена!");
+                System.out.println("Specialization with ID " + id + " has been deleted!");
             } else {
-                System.out.println("Специализация с ID " + id + " не найдена");
+                System.out.println("Specialization with ID " + id + " wasn't found");
             }
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             scn.nextLine();
         }
     }
 
     @Override
     public String getCommandName() {
-        return "Удалить специализацию по ID";
+        return "Delete a specialization by ID";
     }
 }

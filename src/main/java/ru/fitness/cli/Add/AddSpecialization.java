@@ -12,7 +12,7 @@ public class AddSpecialization implements Command {
 
     @Override
     public void execute() {
-        System.out.print("Введите название специализации: ");
+        System.out.print("Enter the name of the specialization: ");
         String name = scn.nextLine();
 
         try {
@@ -20,14 +20,14 @@ public class AddSpecialization implements Command {
             SpecializationService service = ServiceFactory.getSpecializationService();
             service.create(spec);
 
-            System.out.println("✓ Специализация '" + name + "' добавлена!");
+            System.out.println("Specialization '" + name + "' was added!");
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
     @Override
     public String getCommandName() {
-        return "Добавить специализацию";
+        return "Add specialization";
     }
 }

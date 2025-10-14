@@ -15,7 +15,7 @@ public class DeleteClient implements Command {
         try {
             new GetAllClients().execute();
 
-            System.out.print("Введите ID клиента для удаления: ");
+            System.out.print("Enter the client's ID to delete: ");
             int id = scn.nextInt();
             scn.nextLine();
 
@@ -23,18 +23,18 @@ public class DeleteClient implements Command {
             boolean deleted = service.delete(id);
 
             if (deleted) {
-                System.out.println("Клиент с ID " + id + " удален!");
+                System.out.println("Client with ID " + id + " has been deleted!");
             } else {
-                System.out.println("Клиент с ID " + id + " не найден");
+                System.out.println("Client with ID " + id + " wasn't found");
             }
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             scn.nextLine();
         }
     }
 
     @Override
     public String getCommandName() {
-        return "Удалить клиента по ID";
+        return "Delete a client by ID";
     }
 }
