@@ -13,50 +13,50 @@ public class UpdateClient implements Command {
     @Override
     public void execute() {
         try {
-            System.out.println("\n--- ВСЕ КЛИЕНТЫ ---");
+            System.out.println("\n--- ALL CLIENTS ---");
             ClientService service = ServiceFactory.getClientService();
             var clients = service.getAll();
 
             if (clients.isEmpty()) {
-                System.out.println("Клиенты не найдены");
+                System.out.println("No clients found");
                 return;
             }
 
             for (var client : clients) {
                 System.out.println(client.getId() + ". " + client.getFullName() +
-                        " | Телефон: " + client.getPhoneNumber());
+                        " | Phone number: " + client.getPhoneNumber());
             }
 
-            System.out.print("\nВведите ID клиента для обновления: ");
+            System.out.print("\nEnter the client's ID for the update: ");
             int id = scn.nextInt();
             scn.nextLine();
 
             Client existing = service.getById(id);
             if (existing == null) {
-                System.out.println("Клиент с ID " + id + " не найден");
+                System.out.println("Client with ID " + id + " wasn't found");
                 return;
             }
 
-            System.out.print("Введите новое ФИО клиента: ");
+            System.out.print("Enter the new full name of the client: ");
             String newName = scn.nextLine();
 
-            System.out.print("Введите новый телефон клиента: ");
+            System.out.print("Enter the client's new phone number: ");
             String newPhone = scn.nextLine();
 
             Client updatedClient = new Client(id, newName, newPhone);
 
             service.update(id, updatedClient);
 
-            System.out.println("Клиент обновлен: " + newName);
+            System.out.println("The client has been updated: " + newName);
 
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             scn.nextLine();
         }
     }
 
     @Override
     public String getCommandName() {
-        return "Обновить клиента";
+        return "Update client";
     }
 }

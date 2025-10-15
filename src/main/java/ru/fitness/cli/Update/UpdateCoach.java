@@ -20,28 +20,28 @@ public class UpdateCoach implements Command {
             var coaches = coachService.getAll();
 
             if (coaches.isEmpty()) {
-                System.out.println("Тренеры не найдены");
+                System.out.println("No coaches found");
                 return;
             }
 
             for (var coach : coaches) {
                 String specName = coach.getSpecialization() != null ?
-                        coach.getSpecialization().getName() : "не указана";
+                        coach.getSpecialization().getName() : "not specified";
                 System.out.println(coach.getId() + ". " + coach.getFullName() +
                         " (Specialization: " + specName + ")");
             }
 
-            System.out.print("\nВведите ID тренера для обновления: ");
+            System.out.print("\nEnter the coach's ID to update: ");
             int id = scn.nextInt();
             scn.nextLine();
 
             Coach existing = coachService.getById(id);
             if (existing == null) {
-                System.out.println("Тренер с ID " + id + " не найдена");
+                System.out.println("Coach with ID " + id + " wasn't found");
                 return;
             }
 
-            System.out.print("Введите новое ФИО тренера: ");
+            System.out.print("Enter the coach's new full name: ");
             String newName = scn.nextLine();
 
             Specialization specialization = selectSpecialization();
@@ -53,10 +53,10 @@ public class UpdateCoach implements Command {
 
             coachService.update(id, updatedCoach);
 
-            System.out.println("✓ Тренер обновлен: " + newName);
+            System.out.println("The coach has been updated: " + newName);
 
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             scn.nextLine();
         }
     }
@@ -66,9 +66,9 @@ public class UpdateCoach implements Command {
             SpecializationService specService = ServiceFactory.getSpecializationService();
             var specializations = specService.getAll();
 
-            System.out.println("\n--- ДОСТУПНЫЕ СПЕЦИАЛИЗАЦИИ ---");
+            System.out.println("\n--- AVAILABLE SPECIALIZATIONS ---");
             if (specializations.isEmpty()) {
-                System.out.println("Специализации не найдены");
+                System.out.println("Specializations not found");
                 return null;
             }
 
@@ -76,20 +76,20 @@ public class UpdateCoach implements Command {
                 System.out.println(spec.getId() + ". " + spec.getName());
             }
 
-            System.out.print("\nВведите ID специализации: ");
+            System.out.print("\nEnter the specialization ID: ");
             int specId = scn.nextInt();
             scn.nextLine();
 
             Specialization specialization = specService.getById(specId);
             if (specialization == null) {
-                System.out.println("Ошибка: Специализация с ID " + specId + " не существует!");
+                System.out.println("Error: Specialization with ID " + specId + " doesn't exist!");
                 return null;
             }
 
             return specialization;
 
         } catch (Exception e) {
-            System.out.println("Ошибка при выборе специализации: " + e.getMessage());
+            System.out.println("Error when choosing a specialization: " + e.getMessage());
             scn.nextLine();
             return null;
         }
