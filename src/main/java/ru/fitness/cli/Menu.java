@@ -25,6 +25,7 @@ public class Menu {
             new GetSpecializationById(),
             new AddSpecialization(),
             new UpdateSpecialization(),
+            new DeleteSpecialization(),
 
             // Тренеры
             new GetAllCoaches(),
@@ -32,18 +33,21 @@ public class Menu {
             new GetCoachBySpecialization(),
             new AddCoach(),
             new UpdateCoach(),
+            new DeleteCoach(),
 
             // Клиенты
             new GetAllClients(),
             new GetClientByPhoneNumber(),
             new AddClient(),
             new UpdateClient(),
+            new DeleteClient(),
 
             // Занятия
             new GetAllWorkouts(),
             new GetWorkoutsByCoach(),
             new AddWorkout(),
-            new UpdateWorkout()
+            new UpdateWorkout(),
+            new DeleteWorkout()
     };
 
     public static void run(){

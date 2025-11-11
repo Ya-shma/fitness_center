@@ -78,6 +78,6 @@ public class UpdateWorkout implements Command {
 
     @Override
     public String getCommandName() {
-        return "Обновить занятие";
+        return "Update workout";
     }
 }
