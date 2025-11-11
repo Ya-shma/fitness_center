@@ -1,5 +1,7 @@
 package ru.fitness.service;
 
+import ru.fitness.repository.Booking.BookingRepository;
+import ru.fitness.repository.Booking.BookingRepositoryInMemImpl;
 import ru.fitness.repository.Client.ClientRepository;
 import ru.fitness.repository.Client.ClientRepositoryInMemImpl;
 import ru.fitness.repository.Coach.CoachRepository;
@@ -8,6 +10,8 @@ import ru.fitness.repository.Specialization.SpecializationRepository;
 import ru.fitness.repository.Specialization.SpecializationRepositoryInMemImpl;
 import ru.fitness.repository.Workout.WorkoutRepository;
 import ru.fitness.repository.Workout.WorkoutRepositoryInMemImpl;
+import ru.fitness.service.Booking.BookingService;
+import ru.fitness.service.Booking.BookingServiceImpl;
 import ru.fitness.service.Client.ClientService;
 import ru.fitness.service.Client.ClientServiceImpl;
 import ru.fitness.service.Coach.CoachService;
@@ -22,6 +26,7 @@ public class ServiceFactory {
     private static SpecializationService specializationService;
     private static ClientService clientService;
     private static WorkoutService workoutService;
+    private static BookingService bookingService;
 
     public static CoachService getCoachService() {
         if (coachService == null) {
@@ -53,5 +58,13 @@ public class ServiceFactory {
             workoutService = WorkoutServiceImpl.getInstance(repository);
         }
         return workoutService;
+    }
+
+    public static BookingService getBookingService() {
+        if (bookingService == null) {
+            BookingRepository repository = BookingRepositoryInMemImpl.getInstance();
+            bookingService = BookingServiceImpl.getInstance(repository);
+        }
+        return bookingService;
     }
 }

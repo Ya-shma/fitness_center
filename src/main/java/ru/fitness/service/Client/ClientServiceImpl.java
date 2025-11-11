@@ -1,7 +1,10 @@
 package ru.fitness.service.Client;
 
+import ru.fitness.entities.Booking;
 import ru.fitness.entities.Client;
 import ru.fitness.repository.Client.ClientRepository;
+import ru.fitness.service.Booking.BookingService;
+import ru.fitness.service.ServiceFactory;
 
 import java.util.List;
 
@@ -36,10 +39,10 @@ public class ClientServiceImpl implements ClientService {
         return phoneNumber != null && phoneNumber.matches("^\\+?[0-9]{10,15}$");
     }
 
-    @Override
-    public int getClientBookingsCount(int clientId) {
-        return 0;
-    }
+//    @Override
+//    public int getClientBookingsCount(int clientId) {
+//        return 0;
+//    }
 
     @Override
     public void create(Client object) {
@@ -82,12 +85,33 @@ public class ClientServiceImpl implements ClientService {
         return repository.getAll();
     }
 
+//    @Override
+//    public boolean delete(int id) {
+//        Client client = repository.getById(id);
+//        if (client == null) {
+//            return false;
+//        }
+//        return repository.delete(id);
+//    }
+
+    @Override
+    public int getClientBookingsCount(int clientId) {
+        BookingService bookingService = ServiceFactory.getBookingService();
+        List<Booking> clientBookings = bookingService.getBookingsByClient(clientId);
+        return clientBookings.size();
+    }
+
     @Override
     public boolean delete(int id) {
-        Client client = repository.getById(id);
-        if (client == null) {
-            return false;
+        // Проверяем, нет ли активных бронирований у этого клиента
+        int activeBookingsCount = (int) getClientBookingsCount(id);
+        if (activeBookingsCount > 0) {
+            throw new IllegalArgumentException(
+                    "Нельзя удалить клиента. Есть активные бронирования: " +
+                            activeBookingsCount + " бронирований"
+            );
         }
+
         return repository.delete(id);
     }
 }

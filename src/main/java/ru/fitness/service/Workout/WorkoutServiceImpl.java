@@ -2,6 +2,8 @@ package ru.fitness.service.Workout;
 
 import ru.fitness.entities.Workout;
 import ru.fitness.repository.Workout.WorkoutRepository;
+import ru.fitness.service.Booking.BookingService;
+import ru.fitness.service.ServiceFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,10 +50,10 @@ public class WorkoutServiceImpl implements WorkoutService {
         return registeredCount < workout.getMaxCapacity();
     }
 
-    @Override
-    public int getRegisteredClientsCount(int workoutId) {
-        return 0;
-    }
+//    @Override
+//    public int getRegisteredClientsCount(int workoutId) {
+//        return 0;
+//    }
 
     @Override
     public void create(Workout object) {
@@ -98,12 +100,32 @@ public class WorkoutServiceImpl implements WorkoutService {
         return repository.getAll();
     }
 
+//    @Override
+//    public boolean delete(int id) {
+//        Workout workout = repository.getById(id);
+//        if (workout == null) {
+//            return false;
+//        }
+//        return repository.delete(id);
+//    }
+
+    @Override
+    public int getRegisteredClientsCount(int workoutId) {
+        BookingService bookingService = ServiceFactory.getBookingService();
+        return bookingService.getActiveBookingsCountByWorkout(workoutId);
+    }
+
     @Override
     public boolean delete(int id) {
-        Workout workout = repository.getById(id);
-        if (workout == null) {
-            return false;
+        // Проверяем, нет ли активных бронирований на это занятие
+        int activeBookings = getRegisteredClientsCount(id);
+        if (activeBookings > 0) {
+            throw new IllegalArgumentException(
+                    "Нельзя удалить занятие. Есть активные бронирования: " +
+                            activeBookings + " клиент(ов)"
+            );
         }
+
         return repository.delete(id);
     }
 }

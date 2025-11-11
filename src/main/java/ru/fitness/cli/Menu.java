@@ -1,13 +1,7 @@
 package ru.fitness.cli;
 
-import ru.fitness.cli.Add.AddClient;
-import ru.fitness.cli.Add.AddCoach;
-import ru.fitness.cli.Add.AddSpecialization;
-import ru.fitness.cli.Add.AddWorkout;
-import ru.fitness.cli.Delete.DeleteClient;
-import ru.fitness.cli.Delete.DeleteCoach;
-import ru.fitness.cli.Delete.DeleteSpecialization;
-import ru.fitness.cli.Delete.DeleteWorkout;
+import ru.fitness.cli.Add.*;
+import ru.fitness.cli.Delete.*;
 import ru.fitness.cli.Get.*;
 import ru.fitness.cli.Update.UpdateClient;
 import ru.fitness.cli.Update.UpdateCoach;
@@ -47,7 +41,15 @@ public class Menu {
             new GetWorkoutsByCoach(),
             new AddWorkout(),
             new UpdateWorkout(),
-            new DeleteWorkout()
+            new DeleteWorkout(),
+
+            // Бронирования
+            new GetAllBookings(),
+            new GetActiveBookings(),
+            new AddBooking(),
+            new CancelBooking(),
+            new CompleteBooking(),
+            new DeleteBooking()
     };
 
     public static void run(){
