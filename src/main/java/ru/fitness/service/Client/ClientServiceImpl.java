@@ -39,11 +39,6 @@ public class ClientServiceImpl implements ClientService {
         return phoneNumber != null && phoneNumber.matches("^\\+?[0-9]{10,15}$");
     }
 
-//    @Override
-//    public int getClientBookingsCount(int clientId) {
-//        return 0;
-//    }
-
     @Override
     public void create(Client object) {
         if (object.getFullName() == null || object.getFullName().trim().isEmpty()) {
@@ -54,12 +49,17 @@ public class ClientServiceImpl implements ClientService {
             throw new IllegalArgumentException("Invalid phone number format");
         }
 
-        Client existing = repository.getClientByPhoneNumber(object.getPhoneNumber());
-        if (existing != null) {
-            throw new IllegalArgumentException("Client with this phone already exists");
+        /*
+        try {
+            Client existing = repository.getClientByPhoneNumber(object.getPhoneNumber());
+            if (existing != null) {
+                throw new IllegalArgumentException("Client with this phone already exists");
+            }
+        } catch (Exception e) {
+            System.out.println("DEBUG: Error during duplicate check: " + e.getMessage());
+            throw new RuntimeException("Error checking client existence: " + e.getMessage(), e);
         }
-
-        repository.add(object);
+        */
     }
 
     @Override
@@ -85,15 +85,6 @@ public class ClientServiceImpl implements ClientService {
         return repository.getAll();
     }
 
-//    @Override
-//    public boolean delete(int id) {
-//        Client client = repository.getById(id);
-//        if (client == null) {
-//            return false;
-//        }
-//        return repository.delete(id);
-//    }
-
     @Override
     public int getClientBookingsCount(int clientId) {
         BookingService bookingService = ServiceFactory.getBookingService();
@@ -103,12 +94,11 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public boolean delete(int id) {
-        // Проверяем, нет ли активных бронирований у этого клиента
-        int activeBookingsCount = (int) getClientBookingsCount(id);
+        int activeBookingsCount = getClientBookingsCount(id);
         if (activeBookingsCount > 0) {
             throw new IllegalArgumentException(
-                    "Нельзя удалить клиента. Есть активные бронирования: " +
-                            activeBookingsCount + " бронирований"
+                    "You can't delete the client. There are active bookings: " +
+                            activeBookingsCount + " bookings"
             );
         }
 

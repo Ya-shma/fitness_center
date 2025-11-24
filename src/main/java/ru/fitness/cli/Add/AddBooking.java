@@ -3,15 +3,11 @@ package ru.fitness.cli.Add;
 import ru.fitness.cli.Command;
 import ru.fitness.cli.Get.GetAllClients;
 import ru.fitness.entities.Booking;
-import ru.fitness.entities.Client;
 import ru.fitness.entities.Workout;
 import ru.fitness.service.ServiceFactory;
 import ru.fitness.service.Booking.BookingService;
-import ru.fitness.service.Client.ClientService;
 import ru.fitness.service.Workout.WorkoutService;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class AddBooking implements Command {
@@ -26,22 +22,35 @@ public class AddBooking implements Command {
             int clientId = scn.nextInt();
             scn.nextLine();
 
-            System.out.println("\n--- AVAILABLE CLASSES ---");
+            System.out.println("\n--- AVAILABLE WORKOUTS ---");
             new ru.fitness.cli.Get.GetAllWorkouts().execute();
 
             System.out.print("Enter the workout ID: ");
             int workoutId = scn.nextInt();
             scn.nextLine();
 
-            System.out.print("Enter the date and time of your reservation (yyyy-mm-dd hh:mm): ");
-            String dateTimeStr = scn.nextLine();
+            WorkoutService workoutService = ServiceFactory.getWorkoutService();
+            Workout selectedWorkout = workoutService.getById(workoutId);
 
-            LocalDateTime bookingDate = parseDateTime(dateTimeStr);
+            if (selectedWorkout == null) {
+                throw new IllegalArgumentException("Workout with ID " + workoutId + " not found");
+            }
+
+            System.out.print("\nConfirm booking? (yes/no): ");
+            String confirmation = scn.nextLine();
+
+            if (!confirmation.equalsIgnoreCase("yes")) {
+                System.out.println("Booking cancelled.");
+                return;
+            }
 
             BookingService service = ServiceFactory.getBookingService();
-            Booking booking = service.createBooking(clientId, workoutId, bookingDate);
+            Booking booking = service.createBooking(clientId, workoutId, selectedWorkout.getDateTime());
 
-            System.out.println("A reservation has been created! ID: " + booking.getId());
+            System.out.println("Booking created successfully! ID: " + booking.getId());
+            System.out.println("Workout: " + selectedWorkout.getName());
+            System.out.println("Date: " + formatDateTime(selectedWorkout.getDateTime()));
+            System.out.println("Client ID: " + clientId);
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -49,13 +58,10 @@ public class AddBooking implements Command {
         }
     }
 
-    private LocalDateTime parseDateTime(String dateTimeStr) {
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            return LocalDateTime.parse(dateTimeStr, formatter);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid date format. Use: yyyy-mm-dd hh:mm");
-        }
+    private String formatDateTime(java.time.LocalDateTime dateTime) {
+        java.time.format.DateTimeFormatter formatter =
+                java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        return dateTime.format(formatter);
     }
 
     @Override

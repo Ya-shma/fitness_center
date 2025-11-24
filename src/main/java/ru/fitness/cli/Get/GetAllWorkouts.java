@@ -20,7 +20,8 @@ public class GetAllWorkouts implements Command {
             for (Workout workout : workouts) {
                 System.out.println(workout.getId() + ". " + workout.getName() +
                         " | Time: " + workout.getDateTime() +
-                        " | Capacity: " + workout.getMaxCapacity());
+                        " | Capacity: " + workout.getMaxCapacity() +
+                        " | Duration: " + workout.getDurationMinutes());
             }
         }
         System.out.println("Total: " + workouts.size() + " workouts");

@@ -21,6 +21,58 @@ import ru.fitness.service.Specialization.SpecializationServiceImpl;
 import ru.fitness.service.Workout.WorkoutService;
 import ru.fitness.service.Workout.WorkoutServiceImpl;
 
+//public class ServiceFactory {
+//    private static CoachService coachService;
+//    private static SpecializationService specializationService;
+//    private static ClientService clientService;
+//    private static WorkoutService workoutService;
+//    private static BookingService bookingService;
+//
+//    public static CoachService getCoachService() {
+//        if (coachService == null) {
+//            CoachRepository repository = CoachRepositoryInMemImpl.getInstance();
+//            coachService = CoachServiceImpl.getInstance(repository);
+//        }
+//        return coachService;
+//    }
+//
+//    public static SpecializationService getSpecializationService() {
+//        if (specializationService == null) {
+//            SpecializationRepository repository = SpecializationRepositoryInMemImpl.getInstance();
+//            specializationService = SpecializationServiceImpl.getInstance(repository);
+//        }
+//        return specializationService;
+//    }
+//
+//    public static ClientService getClientService() {
+//        if (clientService == null) {
+//            ClientRepository repository = ClientRepositoryInMemImpl.getInstance();
+//            clientService = ClientServiceImpl.getInstance(repository);
+//        }
+//        return clientService;
+//    }
+//
+//    public static WorkoutService getWorkoutService() {
+//        if (workoutService == null) {
+//            WorkoutRepository repository = WorkoutRepositoryInMemImpl.getInstance();
+//            workoutService = WorkoutServiceImpl.getInstance(repository);
+//        }
+//        return workoutService;
+//    }
+//
+//    public static BookingService getBookingService() {
+//        if (bookingService == null) {
+//            BookingRepository repository = BookingRepositoryInMemImpl.getInstance();
+//            bookingService = BookingServiceImpl.getInstance(repository);
+//        }
+//        return bookingService;
+//    }
+//}
+
+import ru.fitness.config.DatabaseConnection;
+import ru.fitness.repository.*;
+import ru.fitness.repository.JDBC.*;
+
 public class ServiceFactory {
     private static CoachService coachService;
     private static SpecializationService specializationService;
@@ -28,9 +80,19 @@ public class ServiceFactory {
     private static WorkoutService workoutService;
     private static BookingService bookingService;
 
+    private static final boolean USE_DATABASE = DatabaseConnection.isDatabaseAvailable();
+
+    static {
+        System.out.println(USE_DATABASE ?
+                "🗄️  Используется PostgreSQL база данных" :
+                "💾 Используется In-Memory хранилище");
+    }
+
     public static CoachService getCoachService() {
         if (coachService == null) {
-            CoachRepository repository = CoachRepositoryInMemImpl.getInstance();
+            CoachRepository repository = USE_DATABASE ?
+                    new CoachRepositoryJdbcImpl() :
+                    CoachRepositoryInMemImpl.getInstance();
             coachService = CoachServiceImpl.getInstance(repository);
         }
         return coachService;
@@ -38,7 +100,9 @@ public class ServiceFactory {
 
     public static SpecializationService getSpecializationService() {
         if (specializationService == null) {
-            SpecializationRepository repository = SpecializationRepositoryInMemImpl.getInstance();
+            SpecializationRepository repository = USE_DATABASE ?
+                    new SpecializationRepositoryJdbcImpl() :
+                    SpecializationRepositoryInMemImpl.getInstance();
             specializationService = SpecializationServiceImpl.getInstance(repository);
         }
         return specializationService;
@@ -46,7 +110,9 @@ public class ServiceFactory {
 
     public static ClientService getClientService() {
         if (clientService == null) {
-            ClientRepository repository = ClientRepositoryInMemImpl.getInstance();
+            ClientRepository repository = USE_DATABASE ?
+                    new ClientRepositoryJdbcImpl() :
+                    ClientRepositoryInMemImpl.getInstance();
             clientService = ClientServiceImpl.getInstance(repository);
         }
         return clientService;
@@ -54,7 +120,9 @@ public class ServiceFactory {
 
     public static WorkoutService getWorkoutService() {
         if (workoutService == null) {
-            WorkoutRepository repository = WorkoutRepositoryInMemImpl.getInstance();
+            WorkoutRepository repository = USE_DATABASE ?
+                    new WorkoutRepositoryJdbcImpl() :
+                    WorkoutRepositoryInMemImpl.getInstance();
             workoutService = WorkoutServiceImpl.getInstance(repository);
         }
         return workoutService;
@@ -62,9 +130,15 @@ public class ServiceFactory {
 
     public static BookingService getBookingService() {
         if (bookingService == null) {
-            BookingRepository repository = BookingRepositoryInMemImpl.getInstance();
+            BookingRepository repository = USE_DATABASE ?
+                    new BookingRepositoryJdbcImpl() :
+                    BookingRepositoryInMemImpl.getInstance();
             bookingService = BookingServiceImpl.getInstance(repository);
         }
         return bookingService;
+    }
+
+    public static boolean isUsingDatabase() {
+        return USE_DATABASE;
     }
 }
