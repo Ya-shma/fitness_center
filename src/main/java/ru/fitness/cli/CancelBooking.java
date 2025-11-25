@@ -12,7 +12,6 @@ public class CancelBooking implements Command {
     @Override
     public void execute() {
         try {
-            // Показываем активные бронирования
             new GetActiveBookings().execute();
 
             System.out.print("Enter the booking ID to cancel: ");
