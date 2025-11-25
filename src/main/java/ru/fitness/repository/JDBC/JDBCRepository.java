@@ -4,11 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import ru.fitness.config.DatabaseConnection;
 
 public abstract class JDBCRepository {
 
     protected Connection getConnection() throws SQLException {
-        return ru.fitness.config.DatabaseConnection.getConnection();
+        return DatabaseConnection.getConnection();
     }
 
     protected void closeResources(ResultSet rs, PreparedStatement stmt) {
