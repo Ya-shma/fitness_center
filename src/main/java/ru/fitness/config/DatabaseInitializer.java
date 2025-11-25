@@ -1,29 +1,39 @@
 package ru.fitness.config;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DatabaseInitializer {
 
     public static void initializeDatabase() {
         if (!DatabaseConnection.isDatabaseAvailable()) {
-            System.out.println("База данных недоступна. Проверьте настройки подключения.");
+            System.out.println("The database is not available. Check the connection settings.");
             return;
         }
 
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement()) {
 
-            String createSpecializationsTable = """
+            createTables(statement);
+            createIndexes(statement);
+
+            System.out.println("The database has been initialized successfully");
+
+        } catch (SQLException e) {
+            System.err.println("Database initialization error: " + e.getMessage());
+            throw new RuntimeException("Database initialization failed", e);
+        }
+    }
+
+    private static void createTables(Statement stmt) throws SQLException {
+        String createSpecializationsTable = """
                 CREATE TABLE IF NOT EXISTS specializations (
                     id SERIAL PRIMARY KEY,
                     name VARCHAR(100) NOT NULL UNIQUE
                 )
                 """;
-            statement.execute(createSpecializationsTable);
+        stmt.execute(createSpecializationsTable);
 
-            String createCoachesTable = """
+        String createCoachesTable = """
                 CREATE TABLE IF NOT EXISTS coaches (
                     id SERIAL PRIMARY KEY,
                     full_name VARCHAR(200) NOT NULL,
@@ -31,9 +41,9 @@ public class DatabaseInitializer {
                     FOREIGN KEY (specialization_id) REFERENCES specializations(id) ON DELETE RESTRICT
                 )
                 """;
-            statement.execute(createCoachesTable);
+        stmt.execute(createCoachesTable);
 
-            String createClientsTable = """
+        String createClientsTable = """
                 CREATE TABLE IF NOT EXISTS clients (
                     id SERIAL PRIMARY KEY,
                     full_name VARCHAR(200) NOT NULL,
@@ -41,40 +51,49 @@ public class DatabaseInitializer {
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
                 """;
-            statement.execute(createClientsTable);
+        stmt.execute(createClientsTable);
 
-            String createWorkoutsTable = """
+        String createWorkoutsTable = """
                 CREATE TABLE IF NOT EXISTS workouts (
                     id SERIAL PRIMARY KEY,
                     name VARCHAR(200) NOT NULL,
                     date_time TIMESTAMP NOT NULL,
-                    duration_minutes INTEGER NOT NULL,
-                    max_capacity INTEGER NOT NULL,
+                    duration_minutes INTEGER NOT NULL CHECK (duration_minutes > 0),
+                    max_capacity INTEGER NOT NULL CHECK (max_capacity > 0),
                     coach_id INTEGER NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (coach_id) REFERENCES coaches(id) ON DELETE RESTRICT
                 )
                 """;
-            statement.execute(createWorkoutsTable);
+        stmt.execute(createWorkoutsTable);
 
-            String createBookingsTable = """
+        String createBookingsTable = """
                 CREATE TABLE IF NOT EXISTS bookings (
                     id SERIAL PRIMARY KEY,
                     client_id INTEGER NOT NULL,
                     workout_id INTEGER NOT NULL,
                     booking_date TIMESTAMP NOT NULL,
-                    status VARCHAR(20) DEFAULT 'active',
+                    status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'cancelled', 'completed')),
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE,
                     FOREIGN KEY (workout_id) REFERENCES workouts(id) ON DELETE CASCADE,
                     UNIQUE (client_id, workout_id)
                 )
                 """;
-            statement.execute(createBookingsTable);
+        stmt.execute(createBookingsTable);
+    }
 
-        } catch (SQLException e) {
-            System.err.println("Ошибка инициализации базы данных: " + e.getMessage());
-            throw new RuntimeException("Database initialization failed", e);
-        }
+    private static void createIndexes(Statement stmt) throws SQLException {
+        stmt.execute("CREATE INDEX IF NOT EXISTS idx_coaches_specialization ON coaches(specialization_id)");
+
+        stmt.execute("CREATE INDEX IF NOT EXISTS idx_workouts_coach ON workouts(coach_id)");
+        stmt.execute("CREATE INDEX IF NOT EXISTS idx_workouts_date ON workouts(date_time)");
+
+        stmt.execute("CREATE INDEX IF NOT EXISTS idx_bookings_client ON bookings(client_id)");
+        stmt.execute("CREATE INDEX IF NOT EXISTS idx_bookings_workout ON bookings(workout_id)");
+        stmt.execute("CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings(status)");
+
+        stmt.execute("CREATE INDEX IF NOT EXISTS idx_clients_phone ON clients(phone)");
     }
 
     public static void clearDatabase() {
@@ -86,6 +105,8 @@ public class DatabaseInitializer {
             statement.execute("DROP TABLE IF EXISTS clients");
             statement.execute("DROP TABLE IF EXISTS coaches");
             statement.execute("DROP TABLE IF EXISTS specializations");
+
+            System.out.println("База данных очищена");
 
         } catch (SQLException e) {
             System.err.println("Ошибка очистки базы данных: " + e.getMessage());

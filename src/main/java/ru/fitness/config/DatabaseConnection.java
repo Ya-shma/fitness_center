@@ -1,15 +1,17 @@
 package ru.fitness.config;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DatabaseConnection {
     private static Connection connection;
 
     static {
+        loadDriver();
+    }
+
+    private static void loadDriver() {
         try {
-            Class.forName(DatabaseConfig.getDriver());
+            Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("PostgreSQL JDBC Driver not found", e);
         }
@@ -18,9 +20,9 @@ public class DatabaseConnection {
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(
-                    DatabaseConfig.getUrl(),
-                    DatabaseConfig.getUsername(),
-                    DatabaseConfig.getPassword()
+                    "jdbc:postgresql://localhost:5432/fitness_center",
+                    "postgres",
+                    "1234"
             );
         }
         return connection;
@@ -30,6 +32,7 @@ public class DatabaseConnection {
         if (connection != null) {
             try {
                 connection.close();
+                connection = null;
             } catch (SQLException e) {
                 System.err.println("Error closing database connection: " + e.getMessage());
             }
@@ -38,7 +41,7 @@ public class DatabaseConnection {
 
     public static boolean isDatabaseAvailable() {
         try (Connection conn = getConnection()) {
-            return conn != null && !conn.isClosed();
+            return conn != null && !conn.isClosed() && conn.isValid(2);
         } catch (SQLException e) {
             return false;
         }
