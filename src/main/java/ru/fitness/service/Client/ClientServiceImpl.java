@@ -48,18 +48,6 @@ public class ClientServiceImpl implements ClientService {
         if (!validatePhoneNumber(object.getPhoneNumber())) {
             throw new IllegalArgumentException("Invalid phone number format");
         }
-
-        /*
-        try {
-            Client existing = repository.getClientByPhoneNumber(object.getPhoneNumber());
-            if (existing != null) {
-                throw new IllegalArgumentException("Client with this phone already exists");
-            }
-        } catch (Exception e) {
-            System.out.println("DEBUG: Error during duplicate check: " + e.getMessage());
-            throw new RuntimeException("Error checking client existence: " + e.getMessage(), e);
-        }
-        */
     }
 
     @Override

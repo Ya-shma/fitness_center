@@ -50,11 +50,6 @@ public class WorkoutServiceImpl implements WorkoutService {
         return registeredCount < workout.getMaxCapacity();
     }
 
-//    @Override
-//    public int getRegisteredClientsCount(int workoutId) {
-//        return 0;
-//    }
-
     @Override
     public void create(Workout object) {
 
@@ -100,15 +95,6 @@ public class WorkoutServiceImpl implements WorkoutService {
         return repository.getAll();
     }
 
-//    @Override
-//    public boolean delete(int id) {
-//        Workout workout = repository.getById(id);
-//        if (workout == null) {
-//            return false;
-//        }
-//        return repository.delete(id);
-//    }
-
     @Override
     public int getRegisteredClientsCount(int workoutId) {
         BookingService bookingService = ServiceFactory.getBookingService();
@@ -117,12 +103,11 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public boolean delete(int id) {
-        // Проверяем, нет ли активных бронирований на это занятие
         int activeBookings = getRegisteredClientsCount(id);
         if (activeBookings > 0) {
             throw new IllegalArgumentException(
-                    "Нельзя удалить занятие. Есть активные бронирования: " +
-                            activeBookings + " клиент(ов)"
+                    "You can't delete the workout. There are active bookings: " +
+                            activeBookings + " clients"
             );
         }
 

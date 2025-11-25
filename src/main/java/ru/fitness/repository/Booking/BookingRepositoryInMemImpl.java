@@ -91,7 +91,6 @@ public class BookingRepositoryInMemImpl implements BookingRepository {
                         booking.isActive());
     }
 
-    // CRUD методы из Repository interface
     @Override
     public void add(Booking object) {
         if (object.getId() == 0) {

@@ -50,7 +50,6 @@ public class BookingServiceImpl implements BookingService {
             throw new IllegalArgumentException("The client already has an active booking for this activity");
         }
 
-        // Проверяем что бронирование не в прошлом
         if (bookingDate.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("You can't create a booking in the past");
         }
@@ -146,10 +145,8 @@ public class BookingServiceImpl implements BookingService {
                 .collect(java.util.stream.Collectors.toList());
     }
 
-    // CRUD методы из Service interface
     @Override
     public void create(Booking object) {
-        // Используем специализированный метод вместо прямого создания
         createBooking(object.getClientId(), object.getWorkoutId(), object.getBookingDate());
     }
 
@@ -164,13 +161,6 @@ public class BookingServiceImpl implements BookingService {
         if (existing == null) {
             throw new IllegalArgumentException("Booking with ID " + id + " wasn't found");
         }
-
-//        // Проверяем бизнес-правила при обновлении
-//        if (!existing.getClientId().equals(newObject.getClientId()) ||
-//                !existing.getWorkoutId().equals(newObject.getWorkoutId())) {
-//            throw new IllegalArgumentException("Нельзя изменять клиента или занятие в существующем бронировании");
-//        }
-
         repository.update(id, newObject);
     }
 
