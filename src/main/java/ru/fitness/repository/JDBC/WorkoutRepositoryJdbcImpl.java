@@ -4,11 +4,10 @@ import ru.fitness.entities.Workout;
 import ru.fitness.repository.Workout.WorkoutRepository;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkoutRepositoryJdbcImpl extends JDBCBaseRepository implements WorkoutRepository {
+public class WorkoutRepositoryJdbcImpl extends JDBCRepository implements WorkoutRepository {
 
     @Override
     public List<Workout> getWorkoutsByCoach(int coachId) {

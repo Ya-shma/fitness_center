@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientRepositoryJdbcImpl extends JDBCBaseRepository implements ClientRepository {
+public class ClientRepositoryJdbcImpl extends JDBCRepository implements ClientRepository {
 
     @Override
     public Client getClientByPhoneNumber(String phoneNumber) {

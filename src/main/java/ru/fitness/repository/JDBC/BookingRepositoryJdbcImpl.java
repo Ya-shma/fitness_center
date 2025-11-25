@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookingRepositoryJdbcImpl extends JDBCBaseRepository implements BookingRepository {
+public class BookingRepositoryJdbcImpl extends JDBCRepository implements BookingRepository {
 
     @Override
     public List<Booking> getBookingsByClient(int clientId) {

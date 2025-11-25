@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoachRepositoryJdbcImpl extends JDBCBaseRepository implements CoachRepository {
+public class CoachRepositoryJdbcImpl extends JDBCRepository implements CoachRepository {
 
     @Override
     public Coach getCoachByName(String name) {

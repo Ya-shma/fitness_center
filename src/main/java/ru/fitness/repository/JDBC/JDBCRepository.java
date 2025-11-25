@@ -5,11 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Базовый класс для JDBC репозиториев
- * Содержит общую логику работы с соединениями
- */
-public abstract class JDBCBaseRepository {
+public abstract class JDBCRepository {
 
     protected Connection getConnection() throws SQLException {
         return ru.fitness.config.DatabaseConnection.getConnection();

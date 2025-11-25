@@ -6,9 +6,8 @@ import ru.fitness.repository.Specialization.SpecializationRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class SpecializationRepositoryJdbcImpl extends JDBCBaseRepository implements SpecializationRepository {
+public class SpecializationRepositoryJdbcImpl extends JDBCRepository implements SpecializationRepository {
 
     @Override
     public Specialization getSpecializationByName(String name) {
