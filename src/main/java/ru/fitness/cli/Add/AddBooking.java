@@ -7,6 +7,9 @@ import ru.fitness.entities.Workout;
 import ru.fitness.service.ServiceFactory;
 import ru.fitness.service.Booking.BookingService;
 import ru.fitness.service.Workout.WorkoutService;
+import ru.fitness.cli.Get.GetAllWorkouts;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import java.util.Scanner;
 
@@ -23,7 +26,7 @@ public class AddBooking implements Command {
             scn.nextLine();
 
             System.out.println("\n--- AVAILABLE WORKOUTS ---");
-            new ru.fitness.cli.Get.GetAllWorkouts().execute();
+            new GetAllWorkouts().execute();
 
             System.out.print("Enter the workout ID: ");
             int workoutId = scn.nextInt();
@@ -58,9 +61,9 @@ public class AddBooking implements Command {
         }
     }
 
-    private String formatDateTime(java.time.LocalDateTime dateTime) {
-        java.time.format.DateTimeFormatter formatter =
-                java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    private String formatDateTime(LocalDateTime dateTime) {
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         return dateTime.format(formatter);
     }
 

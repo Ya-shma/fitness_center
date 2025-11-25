@@ -19,14 +19,9 @@ public class AddClient implements Command {
             System.out.print("Enter the client's phone number: ");
             String phone = scn.nextLine();
 
-            System.out.println("DEBUG: Creating client: " + name + ", " + phone);
-
             Client client = new Client(0, name, phone);
             ClientService service = ServiceFactory.getClientService();
-
-            System.out.println("DEBUG: Before service.create()");
             service.create(client);
-            System.out.println("DEBUG: After service.create()");
 
             System.out.println("Client '" + name + "' was added!");
         } catch (Exception e) {
