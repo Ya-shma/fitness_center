@@ -39,7 +39,6 @@ public class SpecializationRepositoryJdbcImpl extends JDBCRepository implements 
             stmt.setString(1, object.getName());
             stmt.executeUpdate();
 
-            // Получаем сгенерированный ID
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
                     object.setId(rs.getInt(1));
@@ -50,20 +49,6 @@ public class SpecializationRepositoryJdbcImpl extends JDBCRepository implements 
             throw new RuntimeException("Failed to add specialization", e);
         }
     }
-
-//    @Override
-//    public void removeAll() {
-//        String sql = "DELETE FROM specializations";
-//
-//        try (Connection conn = getConnection();
-//             PreparedStatement stmt = conn.prepareStatement(sql)) {
-//
-//            stmt.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            throw new RuntimeException("Failed to remove all specializations", e);
-//        }
-//    }
 
     @Override
     public void update(int id, Specialization newObject) {
@@ -135,6 +120,20 @@ public class SpecializationRepositoryJdbcImpl extends JDBCRepository implements 
             throw new RuntimeException("Failed to delete specialization", e);
         }
     }
+
+//    @Override
+//    public void removeAll() {
+//        String sql = "DELETE FROM specializations";
+//
+//        try (Connection conn = getConnection();
+//             PreparedStatement stmt = conn.prepareStatement(sql)) {
+//
+//            stmt.executeUpdate();
+//
+//        } catch (SQLException e) {
+//            throw new RuntimeException("Failed to remove all specializations", e);
+//        }
+//    }
 
     private Specialization mapResultSetToSpecialization(ResultSet rs) throws SQLException {
         return new Specialization(
