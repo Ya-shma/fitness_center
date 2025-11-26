@@ -11,28 +11,21 @@ public class ClientRepositoryJdbcImpl extends JDBCRepository implements ClientRe
 
     @Override
     public Client getClientByPhoneNumber(String phoneNumber) {
-        System.out.println("DEBUG: ClientRepositoryJdbcImpl.getClientByPhoneNumber: " + phoneNumber);
 
         String sql = "SELECT * FROM clients WHERE phone = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            System.out.println("DEBUG: Connection established, preparing statement");
             stmt.setString(1, phoneNumber);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                Client client = mapResultSetToClient(rs);
-                System.out.println("DEBUG: Client found: " + client.getFullName());
-                return client;
+                return mapResultSetToClient(rs);
             }
-            System.out.println("DEBUG: Client not found");
             return null;
 
         } catch (SQLException e) {
-            System.out.println("DEBUG: SQL Error in getClientByPhoneNumber: " + e.getMessage());
-            e.printStackTrace();
             throw new RuntimeException("Failed to find client by phone number: " + e.getMessage(), e);
         }
     }
@@ -60,25 +53,20 @@ public class ClientRepositoryJdbcImpl extends JDBCRepository implements ClientRe
 
     @Override
     public void add(Client object) {
-        System.out.println("DEBUG: ClientRepositoryJdbcImpl.add started");
 
         String sql = "INSERT INTO clients (full_name, phone) VALUES (?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            System.out.println("DEBUG: Before setting parameters");
             stmt.setString(1, object.getFullName());
             stmt.setString(2, object.getPhoneNumber());
-            System.out.println("DEBUG: Before executeUpdate");
             stmt.executeUpdate();
 
-            System.out.println("DEBUG: Before getGeneratedKeys");
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
                     int generatedId = rs.getInt(1);
                     object.setId(generatedId);
-                    System.out.println("DEBUG: Generated ID: " + generatedId);
                 }
             }
 

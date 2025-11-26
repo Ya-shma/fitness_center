@@ -83,20 +83,6 @@ public class CoachRepositoryJdbcImpl extends JDBCRepository implements CoachRepo
         }
     }
 
-//    @Override
-//    public void removeAll() {
-//        String sql = "DELETE FROM coaches";
-//
-//        try (Connection conn = getConnection();
-//             PreparedStatement stmt = conn.prepareStatement(sql)) {
-//
-//            stmt.executeUpdate();
-//
-//        } catch (SQLException e) {
-//            throw new RuntimeException("Failed to remove all coaches", e);
-//        }
-//    }
-
     @Override
     public void update(int id, Coach newObject) {
         String sql = "UPDATE coaches SET full_name = ?, specialization_id = ? WHERE id = ?";
@@ -178,6 +164,20 @@ public class CoachRepositoryJdbcImpl extends JDBCRepository implements CoachRepo
             throw new RuntimeException("Failed to delete coach", e);
         }
     }
+
+    //    @Override
+//    public void removeAll() {
+//        String sql = "DELETE FROM coaches";
+//
+//        try (Connection conn = getConnection();
+//             PreparedStatement stmt = conn.prepareStatement(sql)) {
+//
+//            stmt.executeUpdate();
+//
+//        } catch (SQLException e) {
+//            throw new RuntimeException("Failed to remove all coaches", e);
+//        }
+//    }
 
     private Coach mapResultSetToCoach(ResultSet rs) throws SQLException {
         Specialization specialization = new Specialization(
