@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фитнес-центр - Администратор</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .tab:hover {
+            background: #2980b9;
+        }
+
+        .tab.active {
+            background: #2c3e50;
+        }
+
+        .content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .btn-primary {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #219a52;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-style: normal !important;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        .close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .status {
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-completed {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .error {
+            color: #e74c3c;
+            background: #fdf2f2;
+            padding: 10px;
+            border-radius: 3px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+
+        .error-input {
+            border-color: #e74c3c !important;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>📊 Фитнес-центр - Панель администратора</h1>
+        <p>Управление клиентами, тренерами, тренировками и записями</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="clients">👥 Клиенты</button>
+        <button class="tab" data-tab="coaches">🏋️ Тренеры</button>
+        <button class="tab" data-tab="workouts">📅 Тренировки</button>
+        <button class="tab" data-tab="specializations">🎯 Специализации</button>
+        <button class="tab" data-tab="bookings">📋 Записи</button>
+    </div>
+
+    <div class="content">
+        <!-- Клиенты -->
+        <div id="clients" class="section active">
+            <div class="actions">
+                <button class="btn btn-primary" onclick="showAddModal('client')">+ Добавить клиента</button>
+            </div>
+            <div id="clients-table" class="loading">Загрузка...</div>
+        </div>
+
+        <!-- Тренеры -->
+        <div id="coaches" class="section">
+            <div class="actions">
+                <button class="btn btn-primary" onclick="showAddModal('coach')">+ Добавить тренера</button>
+            </div>
+            <div id="coaches-table"></div>
+        </div>
+
+        <!-- Тренировки -->
+        <div id="workouts" class="section">
+            <div class="actions">
+                <button class="btn btn-primary" onclick="showAddModal('workout')">+ Добавить тренировку</button>
+            </div>
+            <div id="workouts-table"></div>
+        </div>
+
+        <!-- Специализации -->
+        <div id="specializations" class="section">
+            <div class="actions">
+                <button class="btn btn-primary" onclick="showAddModal('specialization')">+ Добавить специализацию</button>
+            </div>
+            <div id="specializations-table"></div>
+        </div>
+
+        <!-- Записи -->
+        <div id="bookings" class="section">
+            <div class="actions">
+                <button class="btn btn-primary" onclick="showAddModal('booking')">+ Добавить запись</button>
+            </div>
+            <div id="bookings-table"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modal-content"></div>
+    </div>
+</div>
+
+<script>
+    // Автоматически определяем базовый URL
+    const basePath = window.location.pathname;
+    const appPath = basePath.substring(0, basePath.lastIndexOf('/'));
+    const API_BASE = `http://localhost:8080${appPath}/api`;
+
+    console.log('API Base URL:', API_BASE);
+
+    let currentTab = 'clients';
+    let currentEditingId = null;
+
+    // Кэши для выпадающих списков
+    let specializationsList = [];
+    let coachesList = [];
+    let clientsList = [];
+    let workoutsList = [];
+
+    // Маппинг сущностей для API
+    const entityMap = {
+        'client': 'clients',
+        'coach': 'coaches',
+        'workout': 'workouts',
+        'specialization': 'specializations',
+        'booking': 'bookings'
+    };
+
+    // Маппинг сущностей на ID контейнеров
+    const entityToContainerMap = {
+        'client': 'clients-table',
+        'coach': 'coaches-table',
+        'workout': 'workouts-table',
+        'specialization': 'specializations-table',
+        'booking': 'bookings-table'
+    };
+
+    // Маппинг вкладок на сущности
+    const tabToEntityMap = {
+        'clients': 'client',
+        'coaches': 'coach',
+        'workouts': 'workout',
+        'specializations': 'specialization',
+        'bookings': 'booking'
+    };
+
+    // Кэш данных для каждой сущности
+    const dataCache = {};
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', () => {
+        // Загружаем данные для активной вкладки (клиенты)
+        loadData('client');
+
+        // Предзагружаем данные для выпадающих списков
+        loadSpecializations();
+        loadCoaches();
+        loadClients();
+        loadWorkouts();
+
+        // Обработчики вкладок
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.dataset.tab;
+                switchTab(tabId);
+            });
+        });
+    });
+
+    function switchTab(tabId) {
+        console.log('Переключение на вкладку:', tabId);
+
+        // Обновляем активную вкладку
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+
+        // Показываем соответствующий раздел
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+
+        currentTab = tabId;
+
+        // Получаем сущность для этой вкладки
+        const entity = tabToEntityMap[tabId];
+        if (!entity) {
+            console.error('Неизвестная вкладка:', tabId);
+            return;
+        }
+
+        // Загружаем данные если их нет в кэше
+        if (!dataCache[entity] || dataCache[entity].length === 0) {
+            loadData(entity);
+        } else {
+            // Показываем данные из кэша
+            renderTable(entity, dataCache[entity]);
+        }
+    }
+
+    async function loadData(entity) {
+        const apiEntity = entityMap[entity];
+        if (!apiEntity) {
+            console.error('Неизвестная сущность:', entity);
+            return;
+        }
+
+        const containerId = entityToContainerMap[entity];
+        if (!containerId) {
+            console.error('Неизвестный контейнер для сущности:', entity);
+            return;
+        }
+
+        const container = document.getElementById(containerId);
+        if (!container) {
+            console.error(`Контейнер не найден: ${containerId}`);
+            return;
+        }
+
+        container.innerHTML = '<div class="loading">Загрузка...</div>';
+
+        try {
+            console.log(`Загрузка данных для ${entity} из ${API_BASE}/${apiEntity}`);
+            const response = await fetch(`${API_BASE}/${apiEntity}`);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+
+            const data = await response.json();
+            console.log(`Загружено ${data.length} записей для ${entity}`, data);
+
+            // Сохраняем в кэш
+            dataCache[entity] = data;
+
+            // Обновляем соответствующий список для выпадающих меню
+            if (entity === 'specialization') specializationsList = data;
+            if (entity === 'coach') coachesList = data;
+            if (entity === 'client') clientsList = data;
+            if (entity === 'workout') workoutsList = data;
+
+            // Отображаем таблицу
+            renderTable(entity, data);
+
+        } catch (error) {
+            console.error('Ошибка загрузки:', error);
+            container.innerHTML = `
+                <div class="error">
+                    <strong>Ошибка загрузки данных ${entity}:</strong><br>
+                    ${error.message}<br>
+                    <button onclick="loadData('${entity}')" class="btn btn-danger">Повторить</button>
+                </div>`;
+        }
+    }
+
+    // Функции загрузки данных для выпадающих списков
+    async function loadSpecializations() {
+        try {
+            const response = await fetch(`${API_BASE}/specializations`);
+            if (response.ok) {
+                specializationsList = await response.json();
+                console.log('Загружены специализации:', specializationsList.length);
+            }
+        } catch (error) {
+            console.warn('Не удалось загрузить специализации:', error);
+        }
+    }
+
+    async function loadCoaches() {
+        try {
+            const response = await fetch(`${API_BASE}/coaches`);
+            if (response.ok) {
+                coachesList = await response.json();
+                console.log('Загружены тренеры:', coachesList.length);
+            }
+        } catch (error) {
+            console.warn('Не удалось загрузить тренеров:', error);
+        }
+    }
+
+    async function loadClients() {
+        try {
+            const response = await fetch(`${API_BASE}/clients`);
+            if (response.ok) {
+                clientsList = await response.json();
+                console.log('Загружены клиенты:', clientsList.length);
+            }
+        } catch (error) {
+            console.warn('Не удалось загрузить клиентов:', error);
+        }
+    }
+
+    async function loadWorkouts() {
+        try {
+            const response = await fetch(`${API_BASE}/workouts`);
+            if (response.ok) {
+                workoutsList = await response.json();
+                console.log('Загружены тренировки:', workoutsList.length);
+            }
+        } catch (error) {
+            console.warn('Не удалось загрузить тренировки:', error);
+        }
+    }
+
+    function renderTable(entity, items) {
+        const containerId = entityToContainerMap[entity];
+        if (!containerId) {
+            console.error('Неизвестный контейнер для сущности:', entity);
+            return;
+        }
+
+        const container = document.getElementById(containerId);
+        if (!container) {
+            console.error(`Контейнер не найден: ${containerId}`);
+            return;
+        }
+
+        if (!items || items.length === 0) {
+            container.innerHTML = '<p>Нет данных</p>';
+            return;
+        }
+
+        let table = '<table>';
+
+        // Заголовки таблицы
+        table += '<thead><tr>';
+
+        // Определяем поля для каждой сущности
+        const fields = getTableFields(entity);
+        fields.forEach(field => {
+            table += `<th>${translateKey(field)}</th>`;
+        });
+
+        table += '<th>Действия</th>';
+        table += '</tr></thead>';
+
+        // Данные
+        table += '<tbody>';
+        items.forEach(item => {
+            table += '<tr>';
+
+            fields.forEach(field => {
+                let value = item[field];
+                value = formatValue(entity, field, value);
+                table += `<td>${value}</td>`;
+            });
+
+            // Кнопки действий
+            table += `<td>
+                <button class="btn btn-primary" onclick="editItem('${entity}', ${item.id})">✏️</button>
+                <button class="btn btn-danger" onclick="deleteItem('${entity}', ${item.id})">🗑️</button>
+            </td>`;
+            table += '</tr>';
+        });
+        table += '</tbody></table>';
+
+        container.innerHTML = table;
+    }
+
+    function getTableFields(entity) {
+        const fields = {
+            'client': ['id', 'fullName', 'phoneNumber'],
+            'coach': ['id', 'fullName', 'specialization'],
+            'workout': ['id', 'name', 'dateTime', 'durationMinutes', 'maxCapacity', 'coachId'],
+            'specialization': ['id', 'name'],
+            'booking': ['id', 'clientId', 'workoutId', 'bookingDate', 'status']
+        };
+        return fields[entity] || ['id'];
+    }
+
+    function formatValue(entity, field, value) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+
+        // Форматирование значений
+        if (field === 'status') {
+            return `<span class="status status-${value}">${value}</span>`;
+        }
+
+        if ((field.includes('date') || field.includes('Date') || field === 'createdAt') && value) {
+            return formatDate(value);
+        }
+
+        if (typeof value === 'object' && value !== null) {
+            if (field === 'specialization') {
+                // Для тренеров показываем название специализации
+                if (value.name) {
+                    return value.name;
+                } else if (value.id) {
+                    // Ищем название в списке специализаций
+                    const spec = specializationsList.find(s => s.id === value.id);
+                    return spec ? spec.name : `ID: ${value.id}`;
+                }
+                return JSON.stringify(value);
+            }
+            return JSON.stringify(value);
+        }
+
+        // Для coachId в тренировках показываем имя тренера
+        if (field === 'coachId' && entity === 'workout') {
+            const coach = coachesList.find(c => c.id === value);
+            return coach ? `${coach.fullName} (ID: ${value})` : value;
+        }
+
+        // Для clientId и workoutId в бронированиях
+        if ((field === 'clientId' || field === 'workoutId') && entity === 'booking') {
+            if (field === 'clientId') {
+                const client = clientsList.find(c => c.id === value);
+                return client ? `${client.fullName} (ID: ${value})` : value;
+            }
+            if (field === 'workoutId') {
+                const workout = workoutsList.find(w => w.id === value);
+                return workout ? `${workout.name} (ID: ${value})` : value;
+            }
+        }
+
+        return String(value);
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return '';
+
+        try {
+            let date;
+
+            if (dateString instanceof Date) {
+                date = dateString;
+            } else if (typeof dateString === 'string') {
+                date = new Date(dateString);
+
+                if (isNaN(date.getTime())) {
+                    const cleanedDate = dateString.replace('T', ' ').replace('Z', '');
+                    date = new Date(cleanedDate);
+
+                    if (isNaN(date.getTime())) {
+                        return dateString;
+                    }
+                }
+            } else {
+                return dateString;
+            }
+
+            // Форматируем дату в нужном формате: ДД.ММ.ГГГГ ЧЧ:ММ
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+            return `${day}.${month}.${year} ${hours}:${minutes}`;
+        } catch (error) {
+            console.warn('Ошибка форматирования даты:', dateString, error);
+            return String(dateString);
+        }
+    }
+
+    function translateKey(key) {
+        const translations = {
+            'id': 'ID',
+            'fullName': 'ФИО',
+            'phoneNumber': 'Телефон',
+            'name': 'Название',
+            'dateTime': 'Дата и время',
+            'durationMinutes': 'Длительность (мин)',
+            'maxCapacity': 'Макс. мест',
+            'coachId': 'Тренер',
+            'specialization': 'Специализация',
+            'clientId': 'Клиент',
+            'workoutId': 'Тренировка',
+            'bookingDate': 'Дата записи',
+            'status': 'Статус',
+            'createdAt': 'Создано'
+        };
+        return translations[key] || key;
+    }
+
+    function showAddModal(entity) {
+        currentEditingId = null;
+        const modal = document.getElementById('modal');
+        const content = document.getElementById('modal-content');
+
+        let form = `<h2>Добавить ${getEntityName(entity)}</h2>`;
+        form += `<form id="add-form" onsubmit="saveItem(event, '${entity}')">`;
+
+        switch(entity) {
+            case 'client':
+                form += `
+                    <div class="form-group">
+                        <label>ФИО:</label>
+                        <input type="text" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Телефон:</label>
+                        <input type="text" name="phoneNumber" required
+                               pattern="[0-9+]{11,15}"
+                               title="Номер телефона должен содержать только цифры и знак +, от 11 до 15 символов">
+                        <div class="error-message" id="phone-error">Номер должен содержать только цифры и +, от 11 до 15 символов</div>
+                    </div>
+                `;
+                break;
+
+            case 'coach':
+                form += `
+                    <div class="form-group">
+                        <label>ФИО:</label>
+                        <input type="text" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Специализация:</label>
+                        <select name="specializationId" required>
+                            <option value="">Выберите специализацию</option>
+                            ${specializationsList.map(spec =>
+                                `<option value="${spec.id}">${spec.name} (ID: ${spec.id})</option>`
+                            ).join('')}
+                        </select>
+                        ${specializationsList.length === 0 ?
+                            '<div class="error">Нет доступных специализаций. Сначала создайте специализации.</div>' : ''}
+                    </div>
+                `;
+                break;
+
+            case 'workout':
+                form += `
+                    <div class="form-group">
+                        <label>Название:</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Дата и время:</label>
+                        <input type="datetime-local" name="dateTime" required id="dateTime-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Длительность (мин):</label>
+                        <input type="number" name="durationMinutes" required min="1" value="60">
+                    </div>
+                    <div class="form-group">
+                        <label>Макс. мест:</label>
+                        <input type="number" name="maxCapacity" required min="1" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Тренер:</label>
+                        <select name="coachId" required>
+                            <option value="">Выберите тренера</option>
+                            ${coachesList.map(coach =>
+                                `<option value="${coach.id}">${coach.fullName} (ID: ${coach.id})</option>`
+                            ).join('')}
+                        </select>
+                        ${coachesList.length === 0 ?
+                            '<div class="error">Нет доступных тренеров. Сначала создайте тренеров.</div>' : ''}
+                    </div>
+                `;
+                break;
+
+            case 'specialization':
+                form += `
+                    <div class="form-group">
+                        <label>Название:</label>
+                        <input type="text" name="name" required>
+                    </div>
+                `;
+                break;
+
+            case 'booking':
+                form += `
+                    <div class="form-group">
+                        <label>Клиент:</label>
+                        <select name="clientId" required>
+                            <option value="">Выберите клиента</option>
+                            ${clientsList.map(client =>
+                                `<option value="${client.id}">${client.fullName} (${client.phoneNumber})</option>`
+                            ).join('')}
+                        </select>
+                        ${clientsList.length === 0 ?
+                            '<div class="error">Нет доступных клиентов. Сначала создайте клиентов.</div>' : ''}
+                    </div>
+                    <div class="form-group">
+                        <label>Тренировка:</label>
+                        <select name="workoutId" required>
+                            <option value="">Выберите тренировку</option>
+                            ${workoutsList.map(workout => {
+                                const dateStr = formatDate(workout.dateTime);
+                                return `<option value="${workout.id}">${workout.name} (${dateStr})</option>`;
+                            }).join('')}
+                        </select>
+                        ${workoutsList.length === 0 ?
+                            '<div class="error">Нет доступных тренировок. Сначала создайте тренировки.</div>' : ''}
+                    </div>
+                    <div class="form-group">
+                        <label>Дата записи:</label>
+                        <input type="datetime-local" name="bookingDate" required id="bookingDate-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Статус:</label>
+                        <select name="status">
+                            <option value="active">Активна</option>
+                            <option value="completed">Завершена</option>
+                            <option value="cancelled">Отменена</option>
+                        </select>
+                    </div>
+                `;
+                break;
+        }
+
+        const hasRequiredData =
+            (entity === 'coach' && specializationsList.length > 0) ||
+            (entity === 'workout' && coachesList.length > 0) ||
+            (entity === 'booking' && clientsList.length > 0 && workoutsList.length > 0) ||
+            (entity === 'client' || entity === 'specialization');
+
+        if (hasRequiredData) {
+            form += `
+                <div class="form-group" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn" onclick="closeModal()">Отмена</button>
+                </div>
+            `;
+        } else {
+            form += `
+                <div class="form-group" style="margin-top: 20px;">
+                    <button type="button" class="btn" onclick="closeModal()">Закрыть</button>
+                </div>
+            `;
+        }
+
+        content.innerHTML = form;
+        modal.classList.add('active');
+
+        // Добавляем валидацию телефона для клиента
+        if (entity === 'client') {
+            setTimeout(() => {
+                const phoneInput = document.querySelector('input[name="phoneNumber"]');
+                const phoneError = document.getElementById('phone-error');
+
+                if (phoneInput) {
+                    phoneInput.addEventListener('input', function() {
+                        validatePhoneNumber(this);
+                    });
+
+                    phoneInput.addEventListener('blur', function() {
+                        validatePhoneNumber(this);
+                    });
+                }
+            }, 100);
+        }
+    }
+
+    function validatePhoneNumber(input) {
+        const value = input.value;
+        const phoneError = document.getElementById('phone-error');
+
+        // Проверка на только цифры и +
+        const phoneRegex = /^[0-9+]+$/;
+        const isValidLength = value.length >= 11 && value.length <= 15;
+        const isValidChars = phoneRegex.test(value);
+
+        if (!isValidChars || !isValidLength) {
+            input.classList.add('error-input');
+            phoneError.classList.add('show');
+            return false;
+        } else {
+            input.classList.remove('error-input');
+            phoneError.classList.remove('show');
+            return true;
+        }
+    }
+
+    async function saveItem(event, entity) {
+        event.preventDefault();
+
+        // Валидация телефона для клиента
+        if (entity === 'client') {
+            const phoneInput = document.querySelector('input[name="phoneNumber"]');
+            if (phoneInput && !validatePhoneNumber(phoneInput)) {
+                alert('❌ Пожалуйста, исправьте номер телефона');
+                return;
+            }
+        }
+
+        const formData = new FormData(event.target);
+        const rawData = Object.fromEntries(formData.entries());
+
+        // Подготавливаем данные
+        const data = prepareData(entity, rawData);
+        const apiEntity = entityMap[entity];
+
+        try {
+            let url = `${API_BASE}/${apiEntity}`;
+            let method = 'POST';
+
+            if (currentEditingId !== null) {
+                url += `/${currentEditingId}`;
+                method = 'PUT';
+            }
+
+            console.log('Отправка данных:', method, url, data);
+
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const responseText = await response.text();
+            let result;
+
+            try {
+                result = JSON.parse(responseText);
+            } catch (e) {
+                throw new Error(`Сервер вернул не JSON: ${responseText.substring(0, 100)}`);
+            }
+
+            if (response.ok) {
+                alert(`✅ Успешно ${currentEditingId !== null ? 'обновлено' : 'добавлено'}!`);
+                closeModal();
+
+                // Очищаем кэш и перезагружаем данные
+                delete dataCache[entity];
+                loadData(entity);
+
+                // Обновляем списки для выпадающих меню
+                if (entity === 'specialization') loadSpecializations();
+                if (entity === 'coach') loadCoaches();
+                if (entity === 'client') loadClients();
+                if (entity === 'workout') loadWorkouts();
+
+            } else {
+                throw new Error(result.error || `Ошибка ${response.status}`);
+            }
+
+        } catch (error) {
+            console.error('Ошибка сохранения:', error);
+            alert(`❌ Ошибка сохранения: ${error.message}`);
+        }
+    }
+
+    function prepareData(entity, rawData) {
+        const data = {};
+
+        Object.keys(rawData).forEach(key => {
+            if (rawData[key] !== '' && rawData[key] !== undefined) {
+                data[key] = rawData[key];
+            }
+        });
+
+        // Преобразуем числовые поля
+        const numericFields = ['durationMinutes', 'maxCapacity', 'coachId',
+                              'clientId', 'workoutId', 'specializationId'];
+
+        numericFields.forEach(field => {
+            if (data[field] !== undefined) {
+                const num = parseInt(data[field]);
+                if (!isNaN(num)) {
+                    data[field] = num;
+                }
+            }
+        });
+
+        // Преобразуем даты в ISO формат
+        if (data.dateTime) {
+            // Добавляем секунды если их нет
+            if (!data.dateTime.includes(':')) {
+                data.dateTime += ':00';
+            }
+            // Преобразуем в ISO строку
+            const date = new Date(data.dateTime);
+            if (!isNaN(date.getTime())) {
+                data.dateTime = date.toISOString();
+            }
+        }
+
+        if (data.bookingDate) {
+            // Добавляем секунды если их нет
+            if (!data.bookingDate.includes(':')) {
+                data.bookingDate += ':00';
+            }
+            // Преобразуем в ISO строку
+            const date = new Date(data.bookingDate);
+            if (!isNaN(date.getTime())) {
+                data.bookingDate = date.toISOString();
+            }
+        }
+
+        if (entity === 'coach' && data.specializationId) {
+            data.specialization = { id: parseInt(data.specializationId) };
+            delete data.specializationId;
+        }
+
+        if (entity === 'booking' && !data.status) {
+            data.status = 'active';
+        }
+
+        return data;
+    }
+
+    async function editItem(entity, id) {
+        currentEditingId = id;
+        const apiEntity = entityMap[entity];
+
+        try {
+            const response = await fetch(`${API_BASE}/${apiEntity}/${id}`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const item = await response.json();
+            console.log('Загружен объект для редактирования:', item);
+
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modal-content');
+
+            let form = `<h2>Редактировать ${getEntityName(entity)} #${id}</h2>`;
+            form += `<form id="edit-form" onsubmit="saveItem(event, '${entity}')">`;
+
+            if (entity === 'client') {
+                form += `
+                    <div class="form-group">
+                        <label>ФИО:</label>
+                        <input type="text" name="fullName" value="${item.fullName || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Телефон:</label>
+                        <input type="text" name="phoneNumber" value="${item.phoneNumber || ''}" required
+                               pattern="[0-9+]{11,15}"
+                               title="Номер телефона должен содержать только цифры и знак +, от 11 до 15 символов">
+                        <div class="error-message" id="phone-error">Номер должен содержать только цифры и +, от 11 до 15 символов</div>
+                    </div>
+                `;
+            } else if (entity === 'coach') {
+                // Для тренера получаем ID специализации
+                let specializationId = '';
+                if (item.specialization) {
+                    if (typeof item.specialization === 'object') {
+                        specializationId = item.specialization.id || '';
+                    } else {
+                        specializationId = item.specialization || '';
+                    }
+                }
+
+                form += `
+                    <div class="form-group">
+                        <label>ФИО:</label>
+                        <input type="text" name="fullName" value="${item.fullName || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Специализация:</label>
+                        <select name="specializationId" required>
+                            <option value="">Выберите специализацию</option>
+                            ${specializationsList.map(spec =>
+                                `<option value="${spec.id}" ${spec.id == specializationId ? 'selected' : ''}>
+                                    ${spec.name} (ID: ${spec.id})
+                                </option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                `;
+            } else if (entity === 'workout') {
+                // Преобразуем дату для datetime-local
+                let dateTimeValue = '';
+                if (item.dateTime) {
+                    const date = new Date(item.dateTime);
+                    if (!isNaN(date.getTime())) {
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const hours = String(date.getHours()).padStart(2, '0');
+                        const minutes = String(date.getMinutes()).padStart(2, '0');
+                        dateTimeValue = `${year}-${month}-${day}T${hours}:${minutes}`;
+                    } else {
+                        // Если дата невалидна, используем текущую дату
+                        const now = new Date();
+                        const year = now.getFullYear();
+                        const month = String(now.getMonth() + 1).padStart(2, '0');
+                        const day = String(now.getDate()).padStart(2, '0');
+                        dateTimeValue = `${year}-${month}-${day}T10:00`;
+                    }
+                }
+
+                form += `
+                    <div class="form-group">
+                        <label>Название:</label>
+                        <input type="text" name="name" value="${item.name || ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Дата и время:</label>
+                        <input type="datetime-local" name="dateTime" value="${dateTimeValue}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Длительность (мин):</label>
+                        <input type="number" name="durationMinutes" value="${item.durationMinutes || 60}" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Макс. мест:</label>
+                        <input type="number" name="maxCapacity" value="${item.maxCapacity || 10}" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Тренер:</label>
+                        <select name="coachId" required>
+                            <option value="">Выберите тренера</option>
+                            ${coachesList.map(coach =>
+                                `<option value="${coach.id}" ${coach.id == item.coachId ? 'selected' : ''}>
+                                    ${coach.fullName} (ID: ${coach.id})
+                                </option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                `;
+            } else if (entity === 'specialization') {
+                form += `
+                    <div class="form-group">
+                        <label>Название:</label>
+                        <input type="text" name="name" value="${item.name || ''}" required>
+                    </div>
+                `;
+            } else if (entity === 'booking') {
+                let bookingDateValue = '';
+                if (item.bookingDate) {
+                    const date = new Date(item.bookingDate);
+                    if (!isNaN(date.getTime())) {
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const hours = String(date.getHours()).padStart(2, '0');
+                        const minutes = String(date.getMinutes()).padStart(2, '0');
+                        bookingDateValue = `${year}-${month}-${day}T${hours}:${minutes}`;
+                    } else {
+                        // Если дата невалидна, используем текущую дату
+                        const now = new Date();
+                        const year = now.getFullYear();
+                        const month = String(now.getMonth() + 1).padStart(2, '0');
+                        const day = String(now.getDate()).padStart(2, '0');
+                        bookingDateValue = `${year}-${month}-${day}T10:00`;
+                    }
+                }
+
+                form += `
+                    <div class="form-group">
+                        <label>Клиент:</label>
+                        <select name="clientId" required>
+                            <option value="">Выберите клиента</option>
+                            ${clientsList.map(client =>
+                                `<option value="${client.id}" ${client.id == item.clientId ? 'selected' : ''}>
+                                    ${client.fullName} (${client.phoneNumber})
+                                </option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Тренировка:</label>
+                        <select name="workoutId" required>
+                            <option value="">Выберите тренировку</option>
+                            ${workoutsList.map(workout => {
+                                const dateStr = formatDate(workout.dateTime);
+                                const selected = workout.id == item.workoutId ? 'selected' : '';
+                                return `<option value="${workout.id}" ${selected}>${workout.name} (${dateStr})</option>`;
+                            }).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Дата записи:</label>
+                        <input type="datetime-local" name="bookingDate" value="${bookingDateValue}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Статус:</label>
+                        <select name="status">
+                            <option value="active" ${item.status === 'active' ? 'selected' : ''}>Активна</option>
+                            <option value="completed" ${item.status === 'completed' ? 'selected' : ''}>Завершена</option>
+                            <option value="cancelled" ${item.status === 'cancelled' ? 'selected' : ''}>Отменена</option>
+                        </select>
+                    </div>
+                `;
+            }
+
+            form += `
+                <div class="form-group" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="button" class="btn" onclick="closeModal()">Отмена</button>
+                </div>
+            </form>`;
+
+            content.innerHTML = form;
+            modal.classList.add('active');
+
+            // Добавляем валидацию телефона для редактирования клиента
+            if (entity === 'client') {
+                setTimeout(() => {
+                    const phoneInput = document.querySelector('input[name="phoneNumber"]');
+                    const phoneError = document.getElementById('phone-error');
+
+                    if (phoneInput) {
+                        phoneInput.addEventListener('input', function() {
+                            validatePhoneNumber(this);
+                        });
+
+                        phoneInput.addEventListener('blur', function() {
+                            validatePhoneNumber(this);
+                        });
+                    }
+                }, 100);
+            }
+
+        } catch (error) {
+            console.error('Ошибка загрузки:', error);
+            alert('Ошибка при загрузке данных: ' + error.message);
+        }
+    }
+
+    async function deleteItem(entity, id) {
+        if (!confirm(`Вы уверены, что хотите удалить ${getEntityName(entity)} #${id}?`)) {
+            return;
+        }
+
+        const apiEntity = entityMap[entity];
+
+        try {
+            console.log(`Удаление ${entity} #${id} из ${API_BASE}/${apiEntity}/${id}`);
+            const response = await fetch(`${API_BASE}/${apiEntity}/${id}`, {
+                method: 'DELETE'
+            });
+
+            console.log('Статус ответа:', response.status);
+            const responseText = await response.text();
+            console.log('Ответ сервера:', responseText);
+
+            if (response.ok) {
+                try {
+                    const result = JSON.parse(responseText);
+                    if (result.success) {
+                        alert('✅ Успешно удалено!');
+                        // Очищаем кэш и перезагружаем данные
+                        delete dataCache[entity];
+                        loadData(entity);
+
+                        // Обновляем списки для выпадающих меню
+                        if (entity === 'specialization') loadSpecializations();
+                        if (entity === 'coach') loadCoaches();
+                        if (entity === 'client') loadClients();
+                        if (entity === 'workout') loadWorkouts();
+
+                    } else {
+                        alert('❌ Не удалось удалить запись: ' + (result.error || 'Неизвестная ошибка'));
+                    }
+                } catch (e) {
+                    // Если сервер вернул не JSON, но статус OK
+                    console.warn('Сервер вернул не JSON при удалении:', responseText);
+                    alert('✅ Удалено (сервер вернул нестандартный ответ)');
+                    delete dataCache[entity];
+                    loadData(entity);
+                }
+            } else {
+                throw new Error(`HTTP ${response.status}: ${responseText}`);
+            }
+        } catch (error) {
+            console.error('Ошибка удаления:', error);
+            alert(`❌ Ошибка удаления: ${error.message}`);
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('modal').classList.remove('active');
+        currentEditingId = null;
+    }
+
+    function getEntityName(entity) {
+        const names = {
+            'client': 'клиента',
+            'coach': 'тренера',
+            'workout': 'тренировку',
+            'specialization': 'специализацию',
+            'booking': 'запись'
+        };
+        return names[entity] || entity;
+    }
+</script>
+</body>
+</html>
