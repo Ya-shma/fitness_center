@@ -1,5 +1,7 @@
 package ru.fitness.entities;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Client {
     private int id;
     private String fullName;

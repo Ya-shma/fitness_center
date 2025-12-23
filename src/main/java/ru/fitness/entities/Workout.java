@@ -1,7 +1,9 @@
 package ru.fitness.entities;
 
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Workout {
     private int id;
     private String name;

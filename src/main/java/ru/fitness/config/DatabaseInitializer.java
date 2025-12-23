@@ -14,7 +14,6 @@ public class DatabaseInitializer {
              Statement statement = connection.createStatement()) {
 
             createTables(statement);
-            createIndexes(statement);
 
             System.out.println("The database has been initialized successfully");
 
@@ -81,19 +80,6 @@ public class DatabaseInitializer {
                 )
                 """;
         stmt.execute(createBookingsTable);
-    }
-
-    private static void createIndexes(Statement stmt) throws SQLException {
-        stmt.execute("CREATE INDEX IF NOT EXISTS idx_coaches_specialization ON coaches(specialization_id)");
-
-        stmt.execute("CREATE INDEX IF NOT EXISTS idx_workouts_coach ON workouts(coach_id)");
-        stmt.execute("CREATE INDEX IF NOT EXISTS idx_workouts_date ON workouts(date_time)");
-
-        stmt.execute("CREATE INDEX IF NOT EXISTS idx_bookings_client ON bookings(client_id)");
-        stmt.execute("CREATE INDEX IF NOT EXISTS idx_bookings_workout ON bookings(workout_id)");
-        stmt.execute("CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings(status)");
-
-        stmt.execute("CREATE INDEX IF NOT EXISTS idx_clients_phone ON clients(phone)");
     }
 
     public static void clearDatabase() {
