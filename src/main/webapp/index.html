@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Фитнес-центр - Администратор</title>
+    <title>Фитнес-центр</title>
     <style>
         * {
             margin: 0;
@@ -237,20 +237,19 @@
 <body>
 <div class="container">
     <header>
-        <h1>📊 Фитнес-центр - Панель администратора</h1>
+        <h1>Фитнес-центр - Панель администратора</h1>
         <p>Управление клиентами, тренерами, тренировками и записями</p>
     </header>
 
     <div class="tabs">
-        <button class="tab active" data-tab="clients">👥 Клиенты</button>
-        <button class="tab" data-tab="coaches">🏋️ Тренеры</button>
-        <button class="tab" data-tab="workouts">📅 Тренировки</button>
-        <button class="tab" data-tab="specializations">🎯 Специализации</button>
-        <button class="tab" data-tab="bookings">📋 Записи</button>
+        <button class="tab active" data-tab="clients">Клиенты</button>
+        <button class="tab" data-tab="coaches">Тренеры</button>
+        <button class="tab" data-tab="workouts">Тренировки</button>
+        <button class="tab" data-tab="specializations">Специализации</button>
+        <button class="tab" data-tab="bookings">Записи</button>
     </div>
 
     <div class="content">
-        <!-- Клиенты -->
         <div id="clients" class="section active">
             <div class="actions">
                 <button class="btn btn-primary" onclick="showAddModal('client')">+ Добавить клиента</button>
@@ -258,7 +257,6 @@
             <div id="clients-table" class="loading">Загрузка...</div>
         </div>
 
-        <!-- Тренеры -->
         <div id="coaches" class="section">
             <div class="actions">
                 <button class="btn btn-primary" onclick="showAddModal('coach')">+ Добавить тренера</button>
@@ -266,7 +264,6 @@
             <div id="coaches-table"></div>
         </div>
 
-        <!-- Тренировки -->
         <div id="workouts" class="section">
             <div class="actions">
                 <button class="btn btn-primary" onclick="showAddModal('workout')">+ Добавить тренировку</button>
@@ -274,15 +271,14 @@
             <div id="workouts-table"></div>
         </div>
 
-        <!-- Специализации -->
         <div id="specializations" class="section">
             <div class="actions">
-                <button class="btn btn-primary" onclick="showAddModal('specialization')">+ Добавить специализацию</button>
+                <button class="btn btn-primary" onclick="showAddModal('specialization')">+ Добавить специализацию
+                </button>
             </div>
             <div id="specializations-table"></div>
         </div>
 
-        <!-- Записи -->
         <div id="bookings" class="section">
             <div class="actions">
                 <button class="btn btn-primary" onclick="showAddModal('booking')">+ Добавить запись</button>
@@ -292,7 +288,6 @@
     </div>
 </div>
 
-<!-- Модальное окно -->
 <div id="modal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -317,7 +312,6 @@
     let clientsList = [];
     let workoutsList = [];
 
-    // Маппинг сущностей для API
     const entityMap = {
         'client': 'clients',
         'coach': 'coaches',
@@ -326,7 +320,6 @@
         'booking': 'bookings'
     };
 
-    // Маппинг сущностей на ID контейнеров
     const entityToContainerMap = {
         'client': 'clients-table',
         'coach': 'coaches-table',
@@ -335,7 +328,6 @@
         'booking': 'bookings-table'
     };
 
-    // Маппинг вкладок на сущности
     const tabToEntityMap = {
         'clients': 'client',
         'coaches': 'coach',
@@ -349,10 +341,9 @@
 
     // Инициализация
     document.addEventListener('DOMContentLoaded', () => {
-        // Загружаем данные для активной вкладки (клиенты)
         loadData('client');
 
-        // Предзагружаем данные для выпадающих списков
+        // Предзагрузка данных для выпадающих списков
         loadSpecializations();
         loadCoaches();
         loadClients();
@@ -380,7 +371,6 @@
 
         currentTab = tabId;
 
-        // Получаем сущность для этой вкладки
         const entity = tabToEntityMap[tabId];
         if (!entity) {
             console.error('Неизвестная вкладка:', tabId);
@@ -391,7 +381,6 @@
         if (!dataCache[entity] || dataCache[entity].length === 0) {
             loadData(entity);
         } else {
-            // Показываем данные из кэша
             renderTable(entity, dataCache[entity]);
         }
     }
@@ -546,8 +535,8 @@
 
             // Кнопки действий
             table += `<td>
-                <button class="btn btn-primary" onclick="editItem('${entity}', ${item.id})">✏️</button>
-                <button class="btn btn-danger" onclick="deleteItem('${entity}', ${item.id})">🗑️</button>
+                <button class="btn btn-primary" onclick="editItem('${entity}', ${item.id})">Изменить</button>
+                <button class="btn btn-danger" onclick="deleteItem('${entity}', ${item.id})">Удалить</button>
             </td>`;
             table += '</tr>';
         });
@@ -587,7 +576,6 @@
                 if (value.name) {
                     return value.name;
                 } else if (value.id) {
-                    // Ищем название в списке специализаций
                     const spec = specializationsList.find(s => s.id === value.id);
                     return spec ? spec.name : `ID: ${value.id}`;
                 }
@@ -596,13 +584,11 @@
             return JSON.stringify(value);
         }
 
-        // Для coachId в тренировках показываем имя тренера
         if (field === 'coachId' && entity === 'workout') {
             const coach = coachesList.find(c => c.id === value);
             return coach ? `${coach.fullName} (ID: ${value})` : value;
         }
 
-        // Для clientId и workoutId в бронированиях
         if ((field === 'clientId' || field === 'workoutId') && entity === 'booking') {
             if (field === 'clientId') {
                 const client = clientsList.find(c => c.id === value);
@@ -640,7 +626,7 @@
                 return dateString;
             }
 
-            // Форматируем дату в нужном формате: ДД.ММ.ГГГГ ЧЧ:ММ
+            // ДД.ММ.ГГГГ ЧЧ:ММ
             const day = String(date.getDate()).padStart(2, '0');
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const year = date.getFullYear();
@@ -825,7 +811,7 @@
         content.innerHTML = form;
         modal.classList.add('active');
 
-        // Добавляем валидацию телефона для клиента
+        // Валидация телефона для клиента
         if (entity === 'client') {
             setTimeout(() => {
                 const phoneInput = document.querySelector('input[name="phoneNumber"]');
@@ -848,7 +834,6 @@
         const value = input.value;
         const phoneError = document.getElementById('phone-error');
 
-        // Проверка на только цифры и +
         const phoneRegex = /^[0-9+]+$/;
         const isValidLength = value.length >= 11 && value.length <= 15;
         const isValidChars = phoneRegex.test(value);
@@ -871,7 +856,7 @@
         if (entity === 'client') {
             const phoneInput = document.querySelector('input[name="phoneNumber"]');
             if (phoneInput && !validatePhoneNumber(phoneInput)) {
-                alert('❌ Пожалуйста, исправьте номер телефона');
+                alert('Пожалуйста, исправьте номер телефона');
                 return;
             }
         }
@@ -913,7 +898,7 @@
             }
 
             if (response.ok) {
-                alert(`✅ Успешно ${currentEditingId !== null ? 'обновлено' : 'добавлено'}!`);
+                alert(`Успешно ${currentEditingId !== null ? 'обновлено' : 'добавлено'}!`);
                 closeModal();
 
                 // Очищаем кэш и перезагружаем данные
@@ -932,7 +917,7 @@
 
         } catch (error) {
             console.error('Ошибка сохранения:', error);
-            alert(`❌ Ошибка сохранения: ${error.message}`);
+            alert(`Ошибка сохранения: ${error.message}`);
         }
     }
 
@@ -960,7 +945,6 @@
 
         // Преобразуем даты в ISO формат
         if (data.dateTime) {
-            // Добавляем секунды если их нет
             if (!data.dateTime.includes(':')) {
                 data.dateTime += ':00';
             }
@@ -972,7 +956,6 @@
         }
 
         if (data.bookingDate) {
-            // Добавляем секунды если их нет
             if (!data.bookingDate.includes(':')) {
                 data.bookingDate += ':00';
             }
@@ -1058,7 +1041,6 @@
                     </div>
                 `;
             } else if (entity === 'workout') {
-                // Преобразуем дату для datetime-local
                 let dateTimeValue = '';
                 if (item.dateTime) {
                     const date = new Date(item.dateTime);
@@ -1070,7 +1052,6 @@
                         const minutes = String(date.getMinutes()).padStart(2, '0');
                         dateTimeValue = `${year}-${month}-${day}T${hours}:${minutes}`;
                     } else {
-                        // Если дата невалидна, используем текущую дату
                         const now = new Date();
                         const year = now.getFullYear();
                         const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -1127,7 +1108,6 @@
                         const minutes = String(date.getMinutes()).padStart(2, '0');
                         bookingDateValue = `${year}-${month}-${day}T${hours}:${minutes}`;
                     } else {
-                        // Если дата невалидна, используем текущую дату
                         const now = new Date();
                         const year = now.getFullYear();
                         const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -1184,7 +1164,7 @@
             content.innerHTML = form;
             modal.classList.add('active');
 
-            // Добавляем валидацию телефона для редактирования клиента
+            // Валидация телефона для редактирования клиента
             if (entity === 'client') {
                 setTimeout(() => {
                     const phoneInput = document.querySelector('input[name="phoneNumber"]');
@@ -1229,7 +1209,7 @@
                 try {
                     const result = JSON.parse(responseText);
                     if (result.success) {
-                        alert('✅ Успешно удалено!');
+                        alert('Успешно удалено!');
                         // Очищаем кэш и перезагружаем данные
                         delete dataCache[entity];
                         loadData(entity);
@@ -1241,12 +1221,12 @@
                         if (entity === 'workout') loadWorkouts();
 
                     } else {
-                        alert('❌ Не удалось удалить запись: ' + (result.error || 'Неизвестная ошибка'));
+                        alert('Не удалось удалить запись: ' + (result.error || 'Неизвестная ошибка'));
                     }
                 } catch (e) {
                     // Если сервер вернул не JSON, но статус OK
                     console.warn('Сервер вернул не JSON при удалении:', responseText);
-                    alert('✅ Удалено (сервер вернул нестандартный ответ)');
+                    alert('Удалено (сервер вернул нестандартный ответ)');
                     delete dataCache[entity];
                     loadData(entity);
                 }
@@ -1255,7 +1235,7 @@
             }
         } catch (error) {
             console.error('Ошибка удаления:', error);
-            alert(`❌ Ошибка удаления: ${error.message}`);
+            alert(`Ошибка удаления: ${error.message}`);
         }
     }
 

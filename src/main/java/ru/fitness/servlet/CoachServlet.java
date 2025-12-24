@@ -27,10 +27,8 @@ public class CoachServlet extends HttpServlet {
 
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
-                // GET /api/coaches
                 objectMapper.writeValue(resp.getWriter(), coachRepo.getAll());
             } else {
-                // GET /api/coaches/{id}
                 String idStr = pathInfo.substring(1);
                 int id = Integer.parseInt(idStr);
                 Coach coach = coachRepo.getById(id);

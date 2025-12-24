@@ -27,10 +27,8 @@ public class BookingServlet extends HttpServlet {
 
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
-                // GET /api/bookings
                 objectMapper.writeValue(resp.getWriter(), bookingRepo.getAll());
             } else {
-                // GET /api/bookings/{id}
                 String idStr = pathInfo.substring(1);
                 int id = Integer.parseInt(idStr);
                 Booking booking = bookingRepo.getById(id);

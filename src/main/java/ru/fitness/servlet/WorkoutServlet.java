@@ -27,10 +27,8 @@ public class WorkoutServlet extends HttpServlet {
 
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
-                // GET /api/workouts
                 objectMapper.writeValue(resp.getWriter(), workoutRepo.getAll());
             } else {
-                // GET /api/workouts/{id}
                 String idStr = pathInfo.substring(1);
                 int id = Integer.parseInt(idStr);
                 Workout workout = workoutRepo.getById(id);

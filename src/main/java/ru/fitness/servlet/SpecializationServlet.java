@@ -27,10 +27,8 @@ public class SpecializationServlet extends HttpServlet {
 
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
-                // GET /api/specializations
                 objectMapper.writeValue(resp.getWriter(), specRepo.getAll());
             } else {
-                // GET /api/specializations/{id}
                 String idStr = pathInfo.substring(1);
                 int id = Integer.parseInt(idStr);
                 Specialization spec = specRepo.getById(id);

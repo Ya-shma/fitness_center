@@ -27,10 +27,8 @@ public class ClientServlet extends HttpServlet {
 
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
-                // GET /api/clients
                 objectMapper.writeValue(resp.getWriter(), clientRepo.getAll());
             } else {
-                // GET /api/clients/{id}
                 String idStr = pathInfo.substring(1);
                 int id = Integer.parseInt(idStr);
                 Client client = clientRepo.getById(id);
