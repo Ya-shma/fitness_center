@@ -296,7 +296,6 @@
 </div>
 
 <script>
-    // Автоматически определяем базовый URL
     const basePath = window.location.pathname;
     const appPath = basePath.substring(0, basePath.lastIndexOf('/'));
     const API_BASE = `http://localhost:8080${appPath}/api`;
@@ -336,20 +335,16 @@
         'bookings': 'booking'
     };
 
-    // Кэш данных для каждой сущности
     const dataCache = {};
 
-    // Инициализация
     document.addEventListener('DOMContentLoaded', () => {
         loadData('client');
 
-        // Предзагрузка данных для выпадающих списков
         loadSpecializations();
         loadCoaches();
         loadClients();
         loadWorkouts();
 
-        // Обработчики вкладок
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 const tabId = tab.dataset.tab;
@@ -377,7 +372,6 @@
             return;
         }
 
-        // Загружаем данные если их нет в кэше
         if (!dataCache[entity] || dataCache[entity].length === 0) {
             loadData(entity);
         } else {
@@ -418,7 +412,6 @@
             const data = await response.json();
             console.log(`Загружено ${data.length} записей для ${entity}`, data);
 
-            // Сохраняем в кэш
             dataCache[entity] = data;
 
             // Обновляем соответствующий список для выпадающих меню
@@ -427,7 +420,6 @@
             if (entity === 'client') clientsList = data;
             if (entity === 'workout') workoutsList = data;
 
-            // Отображаем таблицу
             renderTable(entity, data);
 
         } catch (error) {
@@ -510,7 +502,6 @@
 
         let table = '<table>';
 
-        // Заголовки таблицы
         table += '<thead><tr>';
 
         // Определяем поля для каждой сущности
@@ -561,7 +552,6 @@
             return '';
         }
 
-        // Форматирование значений
         if (field === 'status') {
             return `<span class="status status-${value}">${value}</span>`;
         }
@@ -863,8 +853,6 @@
 
         const formData = new FormData(event.target);
         const rawData = Object.fromEntries(formData.entries());
-
-        // Подготавливаем данные
         const data = prepareData(entity, rawData);
         const apiEntity = entityMap[entity];
 
@@ -1210,7 +1198,6 @@
                     const result = JSON.parse(responseText);
                     if (result.success) {
                         alert('Успешно удалено!');
-                        // Очищаем кэш и перезагружаем данные
                         delete dataCache[entity];
                         loadData(entity);
 
